@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_list_or_404, get_object_or_404
 import requests
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -6,7 +6,9 @@ from rest_framework import status
 from .serializers import (DepositSerializer,
                           DepositOptionsSerializer,
                           InstallmentSavingsSerializer,
-                          InstallmentSavingsOptionsSerializer)
+                          InstallmentSavingsOptionsSerializer,
+                          DepositListSerializer,
+                          InstallmentSavingsListSerializer)
 from .models import (Deposit,
                      DepositOptions,
                      InstallmentSavings,
@@ -122,3 +124,31 @@ def getInstallmentSavingsProducts(request):
             "message" : "적금 데이터가 성공적으로 저장되었습니다."
         }
         return Response(message, status=status.HTTP_200_OK)
+
+@api_view(['GET',])
+def depositList(request) :
+    if request.method == 'GET':
+        deposits = get_list_or_404(Deposit)
+        serializer = DepositListSerializer(deposits, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET',])
+def depositDetail(request, fin_prdt_cd) :
+    if request.method == 'GET':
+        deposit = get_object_or_404(Deposit, fin_prdt_cd=fin_prdt_cd)
+        serializer = DepositListSerializer(deposit)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET',])
+def installmentSavingsList(request) :
+    if request.method == 'GET':
+        installment_savings = get_list_or_404(InstallmentSavings)
+        serializer = InstallmentSavingsListSerializer(installment_savings, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET',])
+def installmentSavingsDetail(request, fin_prdt_cd) :
+    if request.method == 'GET':
+        installment_savings = get_object_or_404(InstallmentSavings, fin_prdt_cd=fin_prdt_cd)
+        serializer = InstallmentSavingsListSerializer(installment_savings)
+        return Response(serializer.data, status=status.HTTP_200_OK)
