@@ -26,6 +26,11 @@ class UserLoginSerializer(LoginSerializer):
         return attrs
 
 class UserDetailSerializer(UserDetailsSerializer) :
+    class Meta(UserDetailsSerializer.Meta) :
+        model = User
+        fields = '__all__'
+
+class UserUpdateSerializer(UserDetailsSerializer) :
     class Meta(UserDetailsSerializer.Meta):
         model = User
         fields = ('username', 'email', 'age', 'assets', 'income', 'gender',)
