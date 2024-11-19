@@ -1,0 +1,67 @@
+/* css variable */
+:root {
+  /* color */
+  --color-black: #2b2b2b;
+  --color-gray-01: #eee;
+  --color-gray-02: #d9d9d9;
+  --color-gray-03: #bdbdbd;
+  --color-gray-04: #aaa;
+  --color-error: #e37272;
+
+  /* fonts */
+  --font-size-extra-large: 4rem;
+  --font-size-large: 3.2rem;
+  --font-size-medium: 1.6rem;
+  --font-size-small: 1.4rem;
+  --font-size-extra-small: 1rem;
+
+  --font-weight-bold: 700;
+  --font-weight-medium: 600;
+  --font-weight-regular: 500;
+}
+
+/* css reset */
+* {
+  padding: unset;
+  margin: unset;
+  font-size: 62.5%;
+  font-family: "Pretendard Variable", Pretendard;
+}
+
+body {
+  font-size: var(--font-size-medium);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: unset;
+}
+
+ul,
+li {
+  list-style-type: none;
+}
+
+img {
+  vertical-align: top;
+  max-width: 100%;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  background: inherit;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
+  overflow: visible;
+  cursor: pointer;
+}
