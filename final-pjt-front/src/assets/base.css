@@ -2,6 +2,7 @@
 :root {
   /* color */
   --color-black: #2b2b2b;
+  --color-white: #fff;
   --color-gray-01: #eee;
   --color-gray-02: #d9d9d9;
   --color-gray-03: #bdbdbd;
@@ -13,7 +14,7 @@
   --font-size-large: 3.2rem;
   --font-size-medium: 1.6rem;
   --font-size-small: 1.4rem;
-  --font-size-extra-small: 1rem;
+  --font-size-extra-small: 1.2rem;
 
   --font-weight-bold: 700;
   --font-weight-medium: 600;
@@ -21,11 +22,16 @@
 }
 
 /* css reset */
+html {
+  font-size: 62.5%;
+}
+
 * {
   padding: unset;
   margin: unset;
-  font-size: 62.5%;
   font-family: "Pretendard Variable", Pretendard;
+  font-size: 100%;
+  box-sizing: border-box;
 }
 
 body {
@@ -39,6 +45,7 @@ h4,
 h5,
 h6 {
   font-weight: unset;
+  line-height: 1;
 }
 
 ul,
@@ -64,4 +71,10 @@ button {
   padding: 0;
   overflow: visible;
   cursor: pointer;
+}
+
+input {
+  background-color: unset;
+  border: unset;
+  outline: unset;
 }
