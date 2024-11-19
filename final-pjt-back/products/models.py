@@ -11,7 +11,7 @@ class Deposit(models.Model):
     join_member = models.TextField()
 
 class DepositOptions(models.Model):
-    deposit = models.ForeignKey("Deposit", on_delete=models.CASCADE, related_name="deposit_options")
+    fin_prdt_cd = models.ForeignKey("Deposit", to_field="fin_prdt_cd" , on_delete=models.CASCADE, related_name="deposit_options")
     intr_rate_type = models.TextField()
     intr_rate_type_nm = models.TextField()
     save_trm = models.TextField()
@@ -28,7 +28,7 @@ class InstallmentSavings(models.Model):
     join_member = models.TextField()
 
 class InstallmentSavingsOptions(models.Model):
-    installment_savings = models.ForeignKey("InstallmentSavings", on_delete=models.CASCADE, related_name="installment_savings_options")
+    fin_prdt_cd = models.ForeignKey("InstallmentSavings", to_field="fin_prdt_cd", on_delete=models.CASCADE, related_name="installment_savings_options")
     intr_rate_type = models.TextField()
     intr_rate_type_nm = models.TextField()
     save_trm = models.TextField()
