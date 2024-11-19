@@ -27,6 +27,3 @@ def user_detail(request):
             "data" : "회원 탈퇴 완료"
         }
         return Response(data, status=status.HTTP_204_NO_CONTENT)
-
-def password_change(request):
-    pass
