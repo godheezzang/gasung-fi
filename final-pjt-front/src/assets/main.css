@@ -1,0 +1,27 @@
+.container {
+  box-shadow: inset 0 0 20px blue;
+  width: 90%;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.title {
+  font-size: var(--font-size-extra-large);
+  font-weight: var(--font-weight-bold);
+  /* text-align: center; */
+}
+
+/* 모바일 가로 & 테블릿 세로 (해상도 480px ~ 767px)*/
+@media all and (min-width: 480px) and (max-width: 767px) {
+  .container {
+    width: 80%;
+    padding: 0 4rem;
+  }
+}
+
+/* 모바일 세로 (해상도 ~ 479px)*/
+@media all and (max-width: 479px) {
+  .container {
+    width: 100%;
+  }
+}
