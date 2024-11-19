@@ -3,6 +3,7 @@ import ArticleDetail from "@/components/Community/ArticleDetail.vue";
 import ExchangeCalculate from "@/components/ExchangeRate/ExchangeCalculate.vue";
 import ProductDetail from "@/components/Product/ProductDetail.vue";
 import RecommendProduct from "@/components/Profile/RecommendProduct.vue";
+import { useUserStore } from "@/stores/user";
 import ExchangeRateView from "@/views/ExchangeRateView.vue";
 import LoginView from "@/views/LoginView.vue";
 import MainView from "@/views/MainView.vue";
@@ -87,6 +88,22 @@ const router = createRouter({
       ],
     },
   ],
+});
+
+router.beforeEach((to, from, next) => {
+  const userStore = useUserStore();
+
+  if (!userStore.isLoggedIn && to.meta.requiresAuth) {
+    next({ name: "login" });
+  } else {
+    next();
+  }
+
+  if ((userStore.isLoggedIn && to.path === "/login") || to.path === "signup") {
+    next({ path: "/" });
+  } else {
+    next();
+  }
 });
 
 export default router;
