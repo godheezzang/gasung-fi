@@ -10,5 +10,5 @@ class User(AbstractUser):
     income = models.IntegerField(blank=True, null=True)
     gender = models.CharField(max_length=1, blank=True, null=True)
 
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email']
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']

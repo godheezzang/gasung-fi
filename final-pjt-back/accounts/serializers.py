@@ -1,4 +1,4 @@
-from dj_rest_auth.serializers import LoginSerializer
+from dj_rest_auth.serializers import LoginSerializer, UserDetailsSerializer
 from django.contrib.auth import get_user_model
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from rest_framework import serializers
@@ -24,4 +24,10 @@ class UserLoginSerializer(LoginSerializer):
             raise serializers.ValidationError("이메일 또는 비밀번호가 잘못되었습니다.")
         attrs['user'] = user
         return attrs
+
+class UserDetailSerializer(UserDetailsSerializer) :
+    class Meta(UserDetailsSerializer.Meta):
+        model = User
+        fields = ('username', 'email', 'age', 'assets', 'income', 'gender',)
+
 
