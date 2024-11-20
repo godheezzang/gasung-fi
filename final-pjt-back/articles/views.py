@@ -37,3 +37,4 @@ def article_detail(request, article_id):
         }
         return Response(message, status=status.HTTP_204_NO_CONTENT)
 
+
