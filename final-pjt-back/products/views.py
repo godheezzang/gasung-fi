@@ -13,7 +13,6 @@ from .models import (Deposit,
                      DepositOptions,
                      InstallmentSavings,
                      InstallmentSavingsOptions)
-import json
 from gasung_fi import my_settings
 # Create your views here.
 BASE_URL = 'http://finlife.fss.or.kr/finlifeapi/'
