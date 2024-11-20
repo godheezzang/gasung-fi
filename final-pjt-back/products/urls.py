@@ -7,4 +7,6 @@ urlpatterns = [
     path('deposit/<str:fin_prdt_cd>/', views.depositDetail),
     path('installmentSavings/', views.installmentSavingsList),
     path('installmentSavings/<str:fin_prdt_cd>/', views.installmentSavingsDetail),
+    path('deposit/search', views.deposit_search),
+    path('installmentSavings/search', views.installmentSavings_search),
 ]

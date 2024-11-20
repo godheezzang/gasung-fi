@@ -36,12 +36,12 @@ def getDepositProduct(request):
             if not Deposit.objects.filter(fin_prdt_cd=product.get("fin_prdt_cd")).exists():
                 serializer = DepositSerializer(data={
                     'fin_prdt_cd': product.get("fin_prdt_cd"),
-                    'mtrt_int' : get_value_with_default(product, 'mtrt_int', '-1'),
-                    'kor_co_nm': get_value_with_default(product, "kor_co_nm", "-1"),
-                    'join_deny': get_value_with_default(product, "join_deny", "-1"),
-                    'join_member': get_value_with_default(product, "join_member", "-1"),
-                    'join_way': get_value_with_default(product, "join_way", "-1"),
-                    'spcl_cnd': get_value_with_default(product, "spcl_cnd", "-1"),
+                    'mtrt_int' : get_value_with_default(product, 'mtrt_int', '-'),
+                    'kor_co_nm': get_value_with_default(product, "kor_co_nm", "-"),
+                    'join_deny': get_value_with_default(product, "join_deny", "-"),
+                    'join_member': get_value_with_default(product, "join_member", "-"),
+                    'join_way': get_value_with_default(product, "join_way", "-"),
+                    'spcl_cnd': get_value_with_default(product, "spcl_cnd", "-"),
                 })
 
                 if serializer.is_valid(raise_exception=True):
@@ -57,11 +57,11 @@ def getDepositProduct(request):
                                                  intr_rate2=option.get("intr_rate2"),
                                                  save_trm=option.get("save_trm")).exists():
                 serializer = DepositOptionsSerializer(data={
-                    'intr_rate_type': get_value_with_default(option, "intr_rate_type", "-1"),
-                    'intr_rate_type_nm': get_value_with_default(option, "intr_rate_type_nm", "-1"),
+                    'intr_rate_type': get_value_with_default(option, "intr_rate_type", "-"),
+                    'intr_rate_type_nm': get_value_with_default(option, "intr_rate_type_nm", "-"),
                     'intr_rate': get_value_with_default(option, "intr_rate", -1),
                     'intr_rate2': get_value_with_default(option, "intr_rate2", -1),
-                    'save_trm': get_value_with_default(option, "save_trm", "-1"),
+                    'save_trm': get_value_with_default(option, "save_trm", "-"),
                 })
                 if serializer.is_valid(raise_exception=True):
                     serializer.save(fin_prdt_cd=product)
@@ -86,12 +86,12 @@ def getInstallmentSavingsProducts(request):
             if not InstallmentSavings.objects.filter(fin_prdt_cd=product.get("fin_prdt_cd")).exists():
                 serializer = InstallmentSavingsSerializer(data={
                     'fin_prdt_cd': product.get("fin_prdt_cd"),
-                    'mtrt_int' : get_value_with_default(product, 'mtrt_int', '-1'),
-                    'kor_co_nm': get_value_with_default(product, "kor_co_nm", "-1"),
-                    'join_deny': get_value_with_default(product, "join_deny", "-1"),
-                    'join_member': get_value_with_default(product, "join_member", "-1"),
-                    'join_way': get_value_with_default(product, "join_way", "-1"),
-                    'spcl_cnd': get_value_with_default(product, "spcl_cnd", "-1"),
+                    'mtrt_int' : get_value_with_default(product, 'mtrt_int', '-'),
+                    'kor_co_nm': get_value_with_default(product, "kor_co_nm", "-"),
+                    'join_deny': get_value_with_default(product, "join_deny", "-"),
+                    'join_member': get_value_with_default(product, "join_member", "-"),
+                    'join_way': get_value_with_default(product, "join_way", "-"),
+                    'spcl_cnd': get_value_with_default(product, "spcl_cnd", "-"),
                 })
 
                 if serializer.is_valid(raise_exception=True):
@@ -108,13 +108,13 @@ def getInstallmentSavingsProducts(request):
                                                  save_trm=option.get("save_trm"),
                                                  rsrv_type=option.get("rsrv_type")).exists():
                 serializer = InstallmentSavingsOptionsSerializer(data={
-                    'intr_rate_type': get_value_with_default(option, "intr_rate_type", "-1"),
-                    'intr_rate_type_nm': get_value_with_default(option, "intr_rate_type_nm", "-1"),
+                    'intr_rate_type': get_value_with_default(option, "intr_rate_type", "-"),
+                    'intr_rate_type_nm': get_value_with_default(option, "intr_rate_type_nm", "-"),
                     'intr_rate': get_value_with_default(option, "intr_rate", -1),
                     'intr_rate2': get_value_with_default(option, "intr_rate2", -1),
-                    'save_trm': get_value_with_default(option, "save_trm", "-1"),
-                    'rsrv_type': get_value_with_default(option, "rsrv_type", "-1"),
-                    'rsrv_type_nm': get_value_with_default(option, "rsrv_type_nm", "-1"),
+                    'save_trm': get_value_with_default(option, "save_trm", "-"),
+                    'rsrv_type': get_value_with_default(option, "rsrv_type", "-"),
+                    'rsrv_type_nm': get_value_with_default(option, "rsrv_type_nm", "-"),
                 })
                 if serializer.is_valid(raise_exception=True):
                     serializer.save(fin_prdt_cd=product)
@@ -151,3 +151,41 @@ def installmentSavingsDetail(request, fin_prdt_cd) :
         installment_savings = get_object_or_404(InstallmentSavings, fin_prdt_cd=fin_prdt_cd)
         serializer = InstallmentSavingsListSerializer(installment_savings)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET',])
+def deposit_search(request) :
+    if request.method == 'GET':
+        kor_co_nm = request.query_params.get('bank_name', "")
+        save_trm = request.query_params.get('save_trm', "")
+        print(kor_co_nm, save_trm)
+        filter_conditions = {}
+        if kor_co_nm :
+            filter_conditions['kor_co_nm'] = kor_co_nm
+
+        if save_trm :
+            filter_conditions['deposit_options__save_trm'] = save_trm
+        if filter_conditions :
+            deposit = Deposit.objects.filter(**filter_conditions)
+        else :
+            deposit = Deposit.objects.all()
+        serializer = DepositListSerializer(deposit, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET',])
+def installmentSavings_search(request) :
+    if request.method == 'GET':
+        kor_co_nm = request.query_params.get('bank_name', "")
+        save_trm = request.query_params.get('save_trm', "")
+        filter_conditions = {}
+        if kor_co_nm :
+            filter_conditions['kor_co_nm'] = kor_co_nm
+        if save_trm :
+            filter_conditions['deposit_options__save_trm'] = save_trm
+        if filter_conditions :
+            installmentSavings = InstallmentSavings.objects.filter(**filter_conditions)
+        else :
+            installmentSavings = InstallmentSavings.objects.all()
+        serializer = InstallmentSavingsListSerializer(installmentSavings, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
