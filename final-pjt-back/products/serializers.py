@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Deposit, DepositOptions, InstallmentSavings, InstallmentSavingsOptions
+from .models import Deposit, DepositOptions, InstallmentSavings, InstallmentSavingsOptions, UserProducts
 
 class DepositSerializer(serializers.ModelSerializer):
     class Meta:
@@ -42,3 +42,10 @@ class InstallmentSavingsListSerializer(serializers.ModelSerializer):
     class Meta:
         model = InstallmentSavings
         fields = '__all__'
+
+class UserProductsSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField(read_only=True)
+    class Meta:
+        model = UserProducts
+        fields = '__all__'
+        read_only_fields = ("user",)

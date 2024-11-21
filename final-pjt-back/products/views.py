@@ -9,11 +9,13 @@ from .serializers import (DepositSerializer,
                           InstallmentSavingsSerializer,
                           InstallmentSavingsOptionsSerializer,
                           DepositListSerializer,
-                          InstallmentSavingsListSerializer)
+                          InstallmentSavingsListSerializer,
+                          UserProductsSerializer)
 from .models import (Deposit,
                      DepositOptions,
                      InstallmentSavings,
-                     InstallmentSavingsOptions)
+                     InstallmentSavingsOptions,
+                     UserProducts)
 from gasung_fi import my_settings
 # Create your views here.
 BASE_URL = 'http://finlife.fss.or.kr/finlifeapi/'
@@ -39,6 +41,7 @@ def get_deposit_product(request):
                 serializer = DepositSerializer(data={
                     'fin_prdt_cd': product.get("fin_prdt_cd"),
                     'mtrt_int' : get_value_with_default(product, 'mtrt_int', '-'),
+                    'fin_prdt_nm' : get_value_with_default(product, 'fin_prdt_nm', '-'),
                     'kor_co_nm': get_value_with_default(product, "kor_co_nm", "-"),
                     'join_deny': get_value_with_default(product, "join_deny", "-"),
                     'join_member': get_value_with_default(product, "join_member", "-"),
@@ -91,6 +94,7 @@ def get_installment_savings_products(request):
                     'fin_prdt_cd': product.get("fin_prdt_cd"),
                     'mtrt_int' : get_value_with_default(product, 'mtrt_int', '-'),
                     'kor_co_nm': get_value_with_default(product, "kor_co_nm", "-"),
+                    'fin_prdt_nm': get_value_with_default(product, "fin_prdt_nm", "-"),
                     'join_deny': get_value_with_default(product, "join_deny", "-"),
                     'join_member': get_value_with_default(product, "join_member", "-"),
                     'join_way': get_value_with_default(product, "join_way", "-"),
@@ -135,13 +139,24 @@ def deposit_list(request) :
         serializer = DepositListSerializer(deposits, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-@api_view(['GET',])
+@api_view(['GET','POST'])
 @permission_classes([IsAuthenticated])
 def deposit_detail(request, fin_prdt_cd) :
+    deposit = get_object_or_404(Deposit, fin_prdt_cd=fin_prdt_cd)
     if request.method == 'GET':
-        deposit = get_object_or_404(Deposit, fin_prdt_cd=fin_prdt_cd)
         serializer = DepositListSerializer(deposit)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    elif request.method == 'POST':
+        data = {
+            "fin_prdt_cd" : fin_prdt_cd,
+            "product_type" : "정기 예금",
+            "kor_co_nm" : deposit.kor_co_nm,
+            "fin_prdt_nm" : deposit.fin_prdt_nm,
+        }
+        serializer = UserProductsSerializer(data=data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(user = request.user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET',])
 @permission_classes([IsAuthenticated])
@@ -151,13 +166,24 @@ def installment_savings_list(request) :
         serializer = InstallmentSavingsListSerializer(installment_savings, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-@api_view(['GET',])
+@api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def installment_savings_detail(request, fin_prdt_cd) :
+    installment_savings = get_object_or_404(InstallmentSavings, fin_prdt_cd=fin_prdt_cd)
     if request.method == 'GET':
-        installment_savings = get_object_or_404(InstallmentSavings, fin_prdt_cd=fin_prdt_cd)
         serializer = InstallmentSavingsListSerializer(installment_savings)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    elif request.method == 'POST':
+        data = {
+            "fin_prdt_cd" : fin_prdt_cd,
+            "product_type" : "정기 적금",
+            "kor_co_nm" : installment_savings.kor_co_nm,
+            "fin_prdt_nm" : installment_savings.fin_prdt_nm,
+        }
+        serializer = UserProductsSerializer(data=data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(user = request.user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET',])
 @permission_classes([IsAuthenticated])
