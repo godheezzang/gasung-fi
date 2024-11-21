@@ -1,11 +1,11 @@
 from django.shortcuts import render
-from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from accounts.serializers import (UserDetailSerializer, UserUpdateSerializer)
+from accounts.serializers import (UserDetailSerializer,
+                                  UserUpdateSerializer)
 
 
 # Create your views here.
@@ -27,3 +27,4 @@ def user_detail(request):
             "data" : "회원 탈퇴 완료"
         }
         return Response(data, status=status.HTTP_204_NO_CONTENT)
+

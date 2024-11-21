@@ -1,14 +1,15 @@
-from django.shortcuts import render, get_object_or_404, get_list_or_404
+from django.shortcuts import render, get_object_or_404
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .models import Article, Comment
 from .serializers import (ArticleCreateSerializer,
                           CommentSerializer,
-                          ArticleListSerializer,
-                          )
+                          ArticleListSerializer)
 # Create your views here.
 @api_view(['GET', 'POST',])
+@permission_classes([IsAuthenticated])
 def create_or_list_articles(request):
     if request.method == 'GET':
         articles = Article.objects.all()
@@ -21,6 +22,7 @@ def create_or_list_articles(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 @api_view(['GET', 'PUT','DELETE',])
+@permission_classes([IsAuthenticated])
 def article_detail(request, article_id):
     article = get_object_or_404(Article.objects.prefetch_related('comment_set__replies'), pk=article_id)
     if request.method in ['DELETE', 'PUT'] :
@@ -45,6 +47,7 @@ def article_detail(request, article_id):
         return Response(message, status=status.HTTP_204_NO_CONTENT)
 
 @api_view(['POST',])
+@permission_classes([IsAuthenticated])
 def create_comments(request, article_id):
     article = get_object_or_404(Article, pk=article_id)
     if request.method == 'POST':
@@ -54,6 +57,7 @@ def create_comments(request, article_id):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 @api_view(['DELETE', 'PUT', 'POST'])
+@permission_classes([IsAuthenticated])
 def comment_detail(request, article_id, comment_id):
     article = get_object_or_404(Article, pk=article_id)
     comment = get_object_or_404(Comment, pk=comment_id)

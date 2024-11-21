@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_list_or_404, get_object_or_404
 import requests
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from .serializers import (DepositSerializer,
                           DepositOptionsSerializer,
@@ -22,6 +23,7 @@ def get_value_with_default(data, key, default) :
     return data.get(key, default) if data.get(key) is not None else default
 
 @api_view(['GET',])
+@permission_classes([IsAuthenticated])
 def getDepositProduct(request):
     if request.method == 'GET':
         URL = BASE_URL + 'depositProductsSearch.json'
@@ -72,6 +74,7 @@ def getDepositProduct(request):
         return Response(message, status=status.HTTP_200_OK)
 
 @api_view(['GET',])
+@permission_classes([IsAuthenticated])
 def getInstallmentSavingsProducts(request):
     if request.method == 'GET':
         URL = BASE_URL + 'savingProductsSearch.json'
@@ -125,6 +128,7 @@ def getInstallmentSavingsProducts(request):
         return Response(message, status=status.HTTP_200_OK)
 
 @api_view(['GET',])
+@permission_classes([IsAuthenticated])
 def depositList(request) :
     if request.method == 'GET':
         deposits = get_list_or_404(Deposit)
@@ -132,6 +136,7 @@ def depositList(request) :
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET',])
+@permission_classes([IsAuthenticated])
 def depositDetail(request, fin_prdt_cd) :
     if request.method == 'GET':
         deposit = get_object_or_404(Deposit, fin_prdt_cd=fin_prdt_cd)
@@ -139,6 +144,7 @@ def depositDetail(request, fin_prdt_cd) :
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET',])
+@permission_classes([IsAuthenticated])
 def installmentSavingsList(request) :
     if request.method == 'GET':
         installment_savings = get_list_or_404(InstallmentSavings)
@@ -146,6 +152,7 @@ def installmentSavingsList(request) :
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET',])
+@permission_classes([IsAuthenticated])
 def installmentSavingsDetail(request, fin_prdt_cd) :
     if request.method == 'GET':
         installment_savings = get_object_or_404(InstallmentSavings, fin_prdt_cd=fin_prdt_cd)
@@ -153,6 +160,7 @@ def installmentSavingsDetail(request, fin_prdt_cd) :
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET',])
+@permission_classes([IsAuthenticated])
 def deposit_search(request) :
     if request.method == 'GET':
         kor_co_nm = request.query_params.get('bank_name', "")
@@ -172,6 +180,7 @@ def deposit_search(request) :
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET',])
+@permission_classes([IsAuthenticated])
 def installmentSavings_search(request) :
     if request.method == 'GET':
         kor_co_nm = request.query_params.get('bank_name', "")
