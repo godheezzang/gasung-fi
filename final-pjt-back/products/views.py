@@ -24,7 +24,7 @@ def get_value_with_default(data, key, default) :
 
 @api_view(['GET',])
 @permission_classes([IsAuthenticated])
-def getDepositProduct(request):
+def get_deposit_product(request):
     if request.method == 'GET':
         URL = BASE_URL + 'depositProductsSearch.json'
         params = {
@@ -75,7 +75,7 @@ def getDepositProduct(request):
 
 @api_view(['GET',])
 @permission_classes([IsAuthenticated])
-def getInstallmentSavingsProducts(request):
+def get_installment_savings_products(request):
     if request.method == 'GET':
         URL = BASE_URL + 'savingProductsSearch.json'
         params = {
@@ -129,7 +129,7 @@ def getInstallmentSavingsProducts(request):
 
 @api_view(['GET',])
 @permission_classes([IsAuthenticated])
-def depositList(request) :
+def deposit_list(request) :
     if request.method == 'GET':
         deposits = get_list_or_404(Deposit)
         serializer = DepositListSerializer(deposits, many=True)
@@ -137,7 +137,7 @@ def depositList(request) :
 
 @api_view(['GET',])
 @permission_classes([IsAuthenticated])
-def depositDetail(request, fin_prdt_cd) :
+def deposit_detail(request, fin_prdt_cd) :
     if request.method == 'GET':
         deposit = get_object_or_404(Deposit, fin_prdt_cd=fin_prdt_cd)
         serializer = DepositListSerializer(deposit)
@@ -145,7 +145,7 @@ def depositDetail(request, fin_prdt_cd) :
 
 @api_view(['GET',])
 @permission_classes([IsAuthenticated])
-def installmentSavingsList(request) :
+def installment_savings_list(request) :
     if request.method == 'GET':
         installment_savings = get_list_or_404(InstallmentSavings)
         serializer = InstallmentSavingsListSerializer(installment_savings, many=True)
@@ -153,7 +153,7 @@ def installmentSavingsList(request) :
 
 @api_view(['GET',])
 @permission_classes([IsAuthenticated])
-def installmentSavingsDetail(request, fin_prdt_cd) :
+def installment_savings_detail(request, fin_prdt_cd) :
     if request.method == 'GET':
         installment_savings = get_object_or_404(InstallmentSavings, fin_prdt_cd=fin_prdt_cd)
         serializer = InstallmentSavingsListSerializer(installment_savings)
@@ -181,7 +181,7 @@ def deposit_search(request) :
 
 @api_view(['GET',])
 @permission_classes([IsAuthenticated])
-def installmentSavings_search(request) :
+def installment_savings_search(request) :
     if request.method == 'GET':
         kor_co_nm = request.query_params.get('bank_name', "")
         save_trm = request.query_params.get('save_trm', "")

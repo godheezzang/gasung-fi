@@ -8,7 +8,7 @@ from gasung_fi import my_settings
 API_KEY = my_settings.EX_API_KEY
 @api_view(['POST',])
 @permission_classes([IsAuthenticated])
-def getExchangeRates(request):
+def get_exchange_rates(request):
     if request.method == 'POST':
         data = request.data
         foreign_amount = data.get('foreign_amount')
