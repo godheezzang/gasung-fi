@@ -2,6 +2,7 @@ from dj_rest_auth.serializers import LoginSerializer, UserDetailsSerializer
 from django.contrib.auth import get_user_model
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from rest_framework import serializers
+from products.models import UserProducts
 
 User = get_user_model()
 
@@ -26,6 +27,11 @@ class UserLoginSerializer(LoginSerializer):
         return attrs
 
 class UserDetailSerializer(UserDetailsSerializer) :
+    class UserProductsSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = UserProducts
+            fields = '__all__'
+    user_products = UserProductsSerializer(many=True)
     class Meta(UserDetailsSerializer.Meta) :
         model = User
         fields = '__all__'
