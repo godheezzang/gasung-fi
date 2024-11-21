@@ -23,6 +23,12 @@ def create_or_list_articles(request):
 @api_view(['GET', 'PUT','DELETE',])
 def article_detail(request, article_id):
     article = get_object_or_404(Article.objects.prefetch_related('comment_set__replies'), pk=article_id)
+    if request.method in ['DELETE', 'PUT'] :
+        if request.user != article.user:
+            message = {
+                "detail" : "권한이 없습니다."
+            }
+            return Response(message, status=status.HTTP_403_FORBIDDEN)
     if request.method == 'GET':
         serializer = ArticleListSerializer(article)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -51,6 +57,12 @@ def create_comments(request, article_id):
 def comment_detail(request, article_id, comment_id):
     article = get_object_or_404(Article, pk=article_id)
     comment = get_object_or_404(Comment, pk=comment_id)
+    if request.method in ['DELETE', 'PUT'] :
+        if request.user != comment.user:
+            message = {
+                "detail" : "권한이 없습니다."
+            }
+            return Response(message, status=status.HTTP_403_FORBIDDEN)
     if request.method == 'DELETE':
         comment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
