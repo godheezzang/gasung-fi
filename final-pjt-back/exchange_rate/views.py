@@ -9,7 +9,6 @@ from datetime import datetime, timedelta
 # Create your views here.
 API_KEY = my_settings.EX_API_KEY
 @api_view(['GET',])
-@permission_classes([IsAuthenticated])
 def get_exchange_rates(request):
     if request.method == 'GET':
         URL = 'https://www.koreaexim.go.kr/site/program/financial/exchangeJSON'
