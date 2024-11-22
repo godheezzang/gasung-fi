@@ -21,8 +21,6 @@ const handleClick = () => {
     props.onClick();
   }
 };
-
-console.log(props.customClass);
 </script>
 
 <style scoped>

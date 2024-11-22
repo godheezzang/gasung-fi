@@ -18,11 +18,7 @@
         v-model="pwInput"
         placeholder="비밀번호를 입력해 주세요."
       />
-      <Button
-        content="로그인"
-        ariaLabel="로그인"
-        :onClick="handleLogin"
-      ></Button>
+      <Button content="로그인" ariaLabel="로그인" type="submit"></Button>
       <!-- <button type="submit">로그인</button> -->
     </form>
   </div>
