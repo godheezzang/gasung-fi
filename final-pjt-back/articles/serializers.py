@@ -9,7 +9,7 @@ class ArticleCreateSerializer(serializers.ModelSerializer):
         read_only_fields = ('user',)
 class ArticleCommentsSerializer(serializers.ModelSerializer):
     comment_id = serializers.IntegerField(source="id", read_only=True)
-    user = serializers.StringRelatedField(read_only=True)
+    user = serializers.SerializerMethodField()
     replies = serializers.SerializerMethodField()
     class Meta:
         model = Comment
@@ -19,15 +19,20 @@ class ArticleCommentsSerializer(serializers.ModelSerializer):
         replies = Comment.objects.filter(main_comment=obj)
         return ArticleCommentsSerializer(replies, many=True).data
 
+    def get_user(self, obj):
+        return obj.user.username
+
 
 class ArticleListSerializer(serializers.ModelSerializer):
     article_id = serializers.IntegerField(source="id", read_only=True)
     comments = serializers.SerializerMethodField()
-    user = serializers.StringRelatedField(read_only=True)
+    user = serializers.SerializerMethodField()
     comment_count = serializers.SerializerMethodField()
     class Meta:
         model = Article
         exclude = ("id",)
+    def get_user(self, obj):
+        return obj.user.username
 
     def get_comments(self, obj):
         comments = Comment.objects.filter(article = obj, main_comment__isnull=True)
