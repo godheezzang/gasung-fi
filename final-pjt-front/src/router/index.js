@@ -1,4 +1,5 @@
 import App from "@/App.vue";
+import ArticleCreate from "@/components/Community/ArticleCreate.vue";
 import ArticleDetail from "@/components/Community/ArticleDetail.vue";
 import ExchangeCalculate from "@/components/ExchangeRate/ExchangeCalculate.vue";
 import ProductDetail from "@/components/Product/ProductDetail.vue";
@@ -67,13 +68,16 @@ const router = createRouter({
       path: "/community",
       name: "community",
       component: () => import("@/views/CommunityView.vue"),
-      children: [
-        {
-          path: "/community/:article_id",
-          name: "article_detail",
-          component: ArticleDetail,
-        },
-      ],
+    },
+    {
+      path: "/cummunity/create",
+      name: "create_article",
+      component: ArticleCreate,
+    },
+    {
+      path: "/community/:article_id",
+      name: "article_detail",
+      component: ArticleDetail,
     },
     {
       path: "/products",
