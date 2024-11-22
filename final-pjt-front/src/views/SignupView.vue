@@ -20,7 +20,7 @@
         v-model="secondPwInput"
         class="user-input"
       />
-      <Button content="회원가입" :onClick="handleSignup" ariaLabel="회원가입" />
+      <Button content="회원가입" type="submit" ariaLabel="회원가입" />
     </form>
   </div>
 </template>
@@ -37,21 +37,27 @@ const secondPwInput = ref("");
 
 const handleSignup = async () => {
   try {
+    if (firstPwInput.value !== secondPwInput.value) {
+      alert("비밀번호 일치하지 않음");
+    }
     const userData = {
       email: emailInput.value,
       username: nameInput.value,
       password1: firstPwInput.value,
       password2: secondPwInput.value,
     };
-    const response = axios.post(
+    const response = await axios.post(
       `${import.meta.env.VITE_BASE_URL}/accounts/signup/`,
       userData
     );
 
-    console.log(response.data);
+    console.log(response);
+
+    if (response.status === 201) {
+      console.log(response.data);
+    }
   } catch (err) {
-    console.log(err.response.data);
-    throw new Error(err.response.data);
+    throw new Error(err);
   }
 };
 </script>
