@@ -29,6 +29,8 @@ def user_detail(request):
         }
         return Response(data, status=status.HTTP_204_NO_CONTENT)
 
+
+
 class CustomLoginView(LoginView) :
     def get_response(self):
         response_data = super().get_response().data

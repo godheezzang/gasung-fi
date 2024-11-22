@@ -1,5 +1,7 @@
 from django.shortcuts import render, get_list_or_404, get_object_or_404
 import requests
+from django.conf import settings
+from django.core.mail import send_mail
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
@@ -222,6 +224,7 @@ def deposit_intr_rate_update(request, fin_prdt_cd, save_trm) :
     serializer = DepositOptionsUpdateSerializer(deposit_option, data=request.data, partial=True)
     if serializer.is_valid(raise_exception=True):
         serializer.save()
+        send_email(fin_prdt_cd, True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -235,6 +238,40 @@ def installment_savings_intr_rate_update(request, fin_prdt_cd, save_trm, rsrv_ty
     serializer = InstallmentSavingsOptionsUpdateSerializer(installment_savings_option, data=request.data, partial=True)
     if serializer.is_valid(raise_exception=True):
         serializer.save()
+        send_email(fin_prdt_cd, False)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+def send_email(fin_prdt_cd, is_deposit):
+    if is_deposit :
+        product = get_object_or_404(Deposit, fin_prdt_cd=fin_prdt_cd)
+        options = product.deposit_options.all()
+    else :
+        product = get_object_or_404(InstallmentSavings, fin_prdt_cd=fin_prdt_cd)
+        options = product.installment_savings_options.all()
+    fin_prdt_nm = product.fin_prdt_nm
+    user_products = get_list_or_404(UserProducts, fin_prdt_cd=fin_prdt_cd)
+    user_emails = [user_product.user.email for user_product in user_products]
+
+    subject = f'금리 수정 확인 - 상품명 : {fin_prdt_nm}'
+    recipient_list = user_emails
+    mail_message = ''
+    for option in options :
+        if is_deposit :
+            mail_message += f'가입기간 : {option.save_trm} - 금리 : {option.intr_rate} - 우대금리 : {option.intr_rate2}\n'
+        else :
+            mail_message += f'가입기간 : {option.save_trm} - 금리 : {option.intr_rate} - 우대금리 : {option.intr_rate2} - 적립유형 - {option.rsrv_type_nm}\n'
+    message = f'''
+    {fin_prdt_nm}상품의 금리가 다음과 같이 변경되었습니다.\n\n
+    {mail_message}
+    
+    감사합니다.
+    '''
+
+    send_mail(
+        subject,
+        message,
+        settings.EMAIL_HOST_USER,
+        recipient_list,
+        fail_silently=False,
+    )

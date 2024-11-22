@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-from .my_settings import MY_DATABASES
+from .my_settings import MY_DATABASES, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,6 +25,14 @@ SECRET_KEY = 'django-insecure-9m8gs^wx^4!s%quu^6r_^a2bgu)01o&9y3)%*jitz6zk2=3za4
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.naver.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 ALLOWED_HOSTS = []
 
