@@ -20,6 +20,7 @@
       />
       <Button content="로그인" ariaLabel="로그인" type="submit"></Button>
       <!-- <button type="submit">로그인</button> -->
+      <p v-if="!isValid">아이디와 비밀번호를 다시 확인해 주세요.</p>
     </form>
   </div>
 </template>
@@ -35,6 +36,7 @@ const userStore = useUserStore();
 const router = useRouter();
 const emailInput = ref("");
 const pwInput = ref("");
+const isValid = ref("");
 
 const handleLogin = async () => {
   try {
@@ -47,14 +49,16 @@ const handleLogin = async () => {
       userData
     );
 
-    console.log(response.data);
-
     if (response.status === 200) {
       const userToken = response.data.key;
       userStore.login(userData, userToken);
       router.push({ name: "home" });
     }
   } catch (err) {
+    console.log(err.response.status);
+    if (err.response.status) {
+      isValid.value = false;
+    }
     throw new Error(err);
   }
 };
