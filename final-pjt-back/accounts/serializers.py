@@ -28,13 +28,6 @@ class UserLoginSerializer(LoginSerializer):
         attrs['user'] = user
         return attrs
 
-    def create(self, validated_data):
-        user = validated_data['user']
-        return {
-            'key': self.get_token(user),
-            'username': user.username,
-        }
-
 class UserDetailSerializer(UserDetailsSerializer) :
     class UserProductsSerializer(serializers.ModelSerializer):
         user_product_id = serializers.IntegerField(source="id", read_only=True)
