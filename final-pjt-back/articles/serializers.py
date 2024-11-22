@@ -21,7 +21,7 @@ class ArticleListSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_comments(self, obj):
-        comments = obj.objects.filter(main_comment__isnull=True)
+        comments = Comment.objects.filter(main_comment__isnull=True)
         return ArticleCommentsSerializer(comments, many=True).data
 
 

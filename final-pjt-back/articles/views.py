@@ -22,7 +22,7 @@ def create_or_list_articles(request):
 
 @api_view(['GET', 'PUT','DELETE',])
 def article_detail(request, article_id):
-    article = get_object_or_404(Article.objects.prefetch_related('comment_set__replies'), pk=article_id)
+    article = get_object_or_404(Article.objects.prefetch_related('comments__replies'), pk=article_id)
     if request.method in ['DELETE', 'PUT'] :
         if request.user != article.user:
             message = {
