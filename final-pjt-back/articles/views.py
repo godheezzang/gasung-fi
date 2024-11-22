@@ -9,7 +9,6 @@ from .serializers import (ArticleCreateSerializer,
                           ArticleListSerializer)
 # Create your views here.
 @api_view(['GET', 'POST',])
-@permission_classes([IsAuthenticated])
 def create_or_list_articles(request):
     if request.method == 'GET':
         articles = Article.objects.all()
@@ -22,7 +21,6 @@ def create_or_list_articles(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 @api_view(['GET', 'PUT','DELETE',])
-@permission_classes([IsAuthenticated])
 def article_detail(request, article_id):
     article = get_object_or_404(Article.objects.prefetch_related('comment_set__replies'), pk=article_id)
     if request.method in ['DELETE', 'PUT'] :

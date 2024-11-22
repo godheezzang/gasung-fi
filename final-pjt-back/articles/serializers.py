@@ -10,15 +10,19 @@ class ArticleCommentsSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only=True)
     class Meta:
         model = Comment
-        fields = ('id', 'user', 'content', 'main_comment', )
+        fields = ('id', 'user', 'content', )
 
 
 class ArticleListSerializer(serializers.ModelSerializer):
-    comments = ArticleCommentsSerializer(source="comment_set", many=True)
+    comments = serializers.SerializerMethodField()
     user = serializers.StringRelatedField(read_only=True)
     class Meta:
         model = Article
         fields = '__all__'
+
+    def get_comments(self, obj):
+        comments = obj.objects.filter(main_comment__isnull=True)
+        return ArticleCommentsSerializer(comments, many=True).data
 
 
 class CommentSerializer(serializers.ModelSerializer):
