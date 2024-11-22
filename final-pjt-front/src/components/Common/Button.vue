@@ -32,6 +32,7 @@ const handleClick = () => {
 .disabled-btn {
   background-color: var(--color-gray-04);
   color: var(--color-gray-01);
+  cursor: not-allowed;
 }
 
 .small-btn {
