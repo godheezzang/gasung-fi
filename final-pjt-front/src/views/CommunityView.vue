@@ -1,7 +1,12 @@
 <template>
-  <div>CommunityView</div>
+  <div>
+    <ArticleList />
+  </div>
 </template>
 
-<script setup></script>
+<script setup>
+import ArticleDetail from "@/components/Community/ArticleDetail.vue";
+import ArticleList from "@/components/Community/ArticleList.vue";
+</script>
 
 <style scoped></style>
