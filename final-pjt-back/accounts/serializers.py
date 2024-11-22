@@ -7,6 +7,8 @@ from products.models import UserProducts
 User = get_user_model()
 
 class UserRegisterSerializer(RegisterSerializer):
+    def validate_username(self, username):
+        return username
     def validate_email(self, value):
         if User.objects.filter(email=value).exists():
             raise serializers.ValidationError('이 이메일은 이미 사용 중입니다.')

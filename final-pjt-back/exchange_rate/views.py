@@ -4,27 +4,29 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view,permission_classes
 from rest_framework.permissions import IsAuthenticated
 from gasung_fi import my_settings
+from datetime import datetime, timedelta
 # Create your views here.
 API_KEY = my_settings.EX_API_KEY
-@api_view(['POST',])
+@api_view(['GET',])
 @permission_classes([IsAuthenticated])
 def get_exchange_rates(request):
-    if request.method == 'POST':
-        data = request.data
-        foreign_amount = data.get('foreign_amount')
-        foreign_currency = data.get('foreign_currency')
-        krw_amount = data.get('krw_amount')
-
+    if request.method == 'GET':
         URL = 'https://www.koreaexim.go.kr/site/program/financial/exchangeJSON'
         params = {
             "authkey" : API_KEY,
             "data" : "AP01"
         }
         response = requests.get(URL, params=params).json()
-        exchange_rates = {item['cur_nm']: float(item['deal_bas_r'].replace(',','')) for item in response}
-        converted_amount = None
-        if krw_amount is not None and krw_amount > 0:
-            converted_amount = krw_amount / exchange_rates.get(foreign_currency, 0)
-        elif foreign_amount is not None and foreign_amount > 0:
-            converted_amount = foreign_amount * exchange_rates.get(foreign_currency, 1)
-        return Response({"변환된 금액" : round(converted_amount, 5)})
+        if response is None or len(response) == 0:
+            today = datetime.today()
+            for i in range(1, 31):  # 최대 30일 전까지 요청
+                search_date = (today - timedelta(days=i)).strftime('%Y%m%d')
+                params['searchDate'] = search_date
+                response = requests.get(URL, params=params).json()
+
+                if response is not None and len(response) > 0:
+                    break
+
+
+
+        return Response()

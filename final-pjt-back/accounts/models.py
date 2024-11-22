@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 class User(AbstractUser):
+    username = models.CharField(max_length=150, unique=False)
     email = models.EmailField(unique=True)
     age = models.IntegerField(blank=True, null=True)
     assets = models.IntegerField(blank=True, null=True)
@@ -10,4 +11,4 @@ class User(AbstractUser):
     gender = models.CharField(max_length=1, blank=True, null=True)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    REQUIRED_FIELDS = []
