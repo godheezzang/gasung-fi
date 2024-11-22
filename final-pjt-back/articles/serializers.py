@@ -2,9 +2,10 @@ from rest_framework import serializers
 from .models import Article, Comment
 
 class ArticleCreateSerializer(serializers.ModelSerializer):
+    article_id = serializers.IntegerField(source="id", read_only=True)
     class Meta:
         model = Article
-        fields = ('title', 'content',)
+        fields = ("article_id",'title', 'content',)
         read_only_fields = ('user',)
 class ArticleCommentsSerializer(serializers.ModelSerializer):
     comment_id = serializers.IntegerField(source="id", read_only=True)
@@ -23,6 +24,7 @@ class ArticleListSerializer(serializers.ModelSerializer):
     article_id = serializers.IntegerField(source="id", read_only=True)
     comments = serializers.SerializerMethodField()
     user = serializers.StringRelatedField(read_only=True)
+    comment_count = serializers.SerializerMethodField()
     class Meta:
         model = Article
         exclude = ("id",)
@@ -31,9 +33,13 @@ class ArticleListSerializer(serializers.ModelSerializer):
         comments = Comment.objects.filter(article = obj, main_comment__isnull=True)
         return ArticleCommentsSerializer(comments, many=True).data
 
+    def get_comment_count(self, obj):
+        return Comment.objects.filter(article = obj).count()
+
 
 class CommentSerializer(serializers.ModelSerializer):
+    comment_id = serializers.IntegerField(source="id", read_only=True)
     class Meta:
         model = Comment
-        fields = ("id",'content',)
+        fields = ("comment_id",'content',)
         read_only_fields = ('user', 'article', 'main_comment',)

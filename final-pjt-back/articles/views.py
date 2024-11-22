@@ -58,7 +58,7 @@ def create_comments(request, article_id):
 @permission_classes([IsAuthenticated])
 def comment_detail(request, article_id, comment_id):
     article = get_object_or_404(Article, pk=article_id)
-    comment = get_object_or_404(Comment, pk=comment_id)
+    comment = get_object_or_404(Comment, article = article, pk=comment_id)
     if request.method in ['DELETE', 'PUT'] :
         if request.user != comment.user:
             message = {
