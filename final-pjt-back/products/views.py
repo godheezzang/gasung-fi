@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_list_or_404, get_object_or_404
 import requests
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import (DepositSerializer,
@@ -9,7 +10,9 @@ from .serializers import (DepositSerializer,
                           InstallmentSavingsOptionsSerializer,
                           DepositListSerializer,
                           InstallmentSavingsListSerializer,
-                          UserProductsSerializer)
+                          UserProductsSerializer,
+                          InstallmentSavingsOptionsUpdateSerializer,
+                          DepositOptionsUpdateSerializer)
 from .models import (Deposit,
                      DepositOptions,
                      InstallmentSavings,
@@ -212,12 +215,26 @@ def installment_savings_search(request) :
         serializer = InstallmentSavingsListSerializer(installmentSavings, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-@api_view(['POST',])
+@api_view(['PUT',])
+@permission_classes([IsAdminUser])
 def deposit_intr_rate_update(request, fin_prdt_cd, save_trm) :
-    pass
+    deposit_option = get_object_or_404(DepositOptions, fin_prdt_cd=fin_prdt_cd, save_trm=save_trm)
+    serializer = DepositOptionsUpdateSerializer(deposit_option, data=request.data, partial=True)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-@api_view(['POST',])
-def installment_savings_intr_rate_update(request, fin_prdt_cd, save_trm) :
-    pass
+
+@api_view(['PUT',])
+@permission_classes([IsAdminUser])
+def installment_savings_intr_rate_update(request, fin_prdt_cd, save_trm, rsrv_type) :
+    installment_savings_option = get_object_or_404(InstallmentSavingsOptions,
+                                                   fin_prdt_cd=fin_prdt_cd,
+                                                   save_trm=save_trm,
+                                                   rsrv_type=rsrv_type)
+    serializer = InstallmentSavingsOptionsUpdateSerializer(installment_savings_option, data=request.data, partial=True)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 

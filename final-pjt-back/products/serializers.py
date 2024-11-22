@@ -12,6 +12,12 @@ class DepositOptionsSerializer(serializers.ModelSerializer):
         exclude = ("fin_prdt_cd",)
         read_only_fields = ("fin_prdt_cd",)
 
+class DepositOptionsUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DepositOptions
+        exclude = ("fin_prdt_cd",)
+        read_only_fields = ('fin_prdt_cd', 'intr_rate_type', 'intr_rate_type_nm', 'save_trm', )
+
 class InstallmentSavingsSerializer(serializers.ModelSerializer):
     class Meta:
         model = InstallmentSavings
@@ -22,6 +28,11 @@ class InstallmentSavingsOptionsSerializer(serializers.ModelSerializer):
         model = InstallmentSavingsOptions
         exclude = ("fin_prdt_cd",)
         read_only_fields = ("fin_prdt_cd",)
+class InstallmentSavingsOptionsUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InstallmentSavingsOptions
+        exclude = ("fin_prdt_cd",)
+        read_only_fields = ('fin_prdt_cd', 'intr_rate_type', 'intr_rate_type_nm', 'save_trm', 'rsrv_type', 'rsrv_type_nm')
 
 class DepositListSerializer(serializers.ModelSerializer):
     class DepositListOptionsSerializer(serializers.ModelSerializer):
