@@ -25,7 +25,6 @@ def get_value_with_default(data, key, default) :
     return data.get(key, default) if data.get(key) is not None else default
 
 @api_view(['GET',])
-@permission_classes([IsAuthenticated])
 def get_deposit_product(request):
     if request.method == 'GET':
         URL = BASE_URL + 'depositProductsSearch.json'
@@ -77,7 +76,6 @@ def get_deposit_product(request):
         return Response(message, status=status.HTTP_200_OK)
 
 @api_view(['GET',])
-@permission_classes([IsAuthenticated])
 def get_installment_savings_products(request):
     if request.method == 'GET':
         URL = BASE_URL + 'savingProductsSearch.json'
@@ -132,7 +130,6 @@ def get_installment_savings_products(request):
         return Response(message, status=status.HTTP_200_OK)
 
 @api_view(['GET',])
-@permission_classes([IsAuthenticated])
 def deposit_list(request) :
     if request.method == 'GET':
         deposits = get_list_or_404(Deposit)
@@ -140,7 +137,6 @@ def deposit_list(request) :
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET','POST'])
-@permission_classes([IsAuthenticated])
 def deposit_detail(request, fin_prdt_cd) :
     deposit = get_object_or_404(Deposit, fin_prdt_cd=fin_prdt_cd)
     if request.method == 'GET':
@@ -159,7 +155,6 @@ def deposit_detail(request, fin_prdt_cd) :
             return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET',])
-@permission_classes([IsAuthenticated])
 def installment_savings_list(request) :
     if request.method == 'GET':
         installment_savings = get_list_or_404(InstallmentSavings)
@@ -167,7 +162,6 @@ def installment_savings_list(request) :
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET', 'POST'])
-@permission_classes([IsAuthenticated])
 def installment_savings_detail(request, fin_prdt_cd) :
     installment_savings = get_object_or_404(InstallmentSavings, fin_prdt_cd=fin_prdt_cd)
     if request.method == 'GET':
@@ -186,7 +180,6 @@ def installment_savings_detail(request, fin_prdt_cd) :
             return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET',])
-@permission_classes([IsAuthenticated])
 def deposit_search(request) :
     if request.method == 'GET':
         kor_co_nm = request.query_params.get('bank_name', "")
@@ -206,7 +199,6 @@ def deposit_search(request) :
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET',])
-@permission_classes([IsAuthenticated])
 def installment_savings_search(request) :
     if request.method == 'GET':
         kor_co_nm = request.query_params.get('bank_name', "")
