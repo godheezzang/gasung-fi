@@ -66,6 +66,7 @@
   </div>
 </template>
 
+// TODO: 회원가입 유효성 검사 로직 수정
 <script setup>
 import Button from "@/components/Common/Button.vue";
 import { useUserStore } from "@/stores/user";
