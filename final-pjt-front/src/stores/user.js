@@ -5,13 +5,20 @@ export const useUserStore = defineStore("user", () => {
   const user = ref(null);
   const isLoggedIn = ref(false);
   const token = ref(null);
+  const userEmail = ref(null);
 
   onMounted(() => {
     const storedIsLoggedIn = JSON.parse(sessionStorage.getItem("isLoggedIn"));
     const storedToken = JSON.parse(sessionStorage.getItem("userToken"));
+    const storedEmail = JSON.parse(sessionStorage.getItem("userEmail"));
+    // const storedUsername = JSON.parse(sessionStorage.getItem("username"));
+
+    console.log(storedEmail);
     if (storedIsLoggedIn && storedToken) {
       isLoggedIn.value = true;
       token.value = storedToken;
+      userEmail.value = storedEmail;
+      // username.value = storedUsername;
     }
   });
 
@@ -22,6 +29,8 @@ export const useUserStore = defineStore("user", () => {
 
     sessionStorage.setItem("userToken", JSON.stringify(token.value));
     sessionStorage.setItem("isLoggedIn", JSON.stringify(isLoggedIn.value));
+    sessionStorage.setItem("userEmail", JSON.stringify(user.value.email));
+    // sessionStorage.setItem("username", JSON.stringify(user.value.username));
   };
 
   const logout = () => {
