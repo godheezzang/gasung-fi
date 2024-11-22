@@ -94,16 +94,14 @@ router.beforeEach((to, from, next) => {
   const userStore = useUserStore();
 
   if (!userStore.isLoggedIn && to.meta.requiresAuth) {
-    next({ name: "login" });
-  } else {
-    next();
+    return next({ name: "login" });
   }
 
   if ((userStore.isLoggedIn && to.path === "/login") || to.path === "signup") {
-    next({ path: "/" });
-  } else {
-    next();
+    return next({ path: "/" });
   }
+
+  next();
 });
 
 export default router;
