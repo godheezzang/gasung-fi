@@ -183,11 +183,9 @@ def deposit_search(request) :
     if request.method == 'GET':
         kor_co_nm = request.query_params.get('bank_name', "")
         save_trm = request.query_params.get('save_trm', "")
-        print(kor_co_nm, save_trm)
         filter_conditions = {}
         if kor_co_nm :
             filter_conditions['kor_co_nm'] = kor_co_nm
-
         if save_trm :
             filter_conditions['deposit_options__save_trm'] = save_trm
         if filter_conditions :
@@ -213,5 +211,13 @@ def installment_savings_search(request) :
             installmentSavings = InstallmentSavings.objects.all()
         serializer = InstallmentSavingsListSerializer(installmentSavings, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['POST',])
+def deposit_intr_rate_update(request, fin_prdt_cd, save_trm) :
+    pass
+
+@api_view(['POST',])
+def installment_savings_intr_rate_update(request, fin_prdt_cd, save_trm) :
+    pass
 
 

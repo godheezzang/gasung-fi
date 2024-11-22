@@ -44,7 +44,7 @@ class InstallmentSavingsOptions(models.Model):
 
 class UserProducts(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="user_products")
-    fin_prdt_cd = models.CharField(max_length=255, unique=True)
+    fin_prdt_cd = models.CharField(max_length=255)
     product_type = models.TextField()
     kor_co_nm = models.TextField()
     fin_prdt_nm = models.TextField()
