@@ -15,7 +15,7 @@ def get_exchange_rates(request):
             "authkey" : API_KEY,
             "data" : "AP01"
         }
-        response = requests.get(URL, params=params).json()
+        response = requests.get(URL, params=params, verify=False).json()
         if response is None or len(response) == 0:
             today = datetime.today()
             for i in range(1, 31):  # 최대 30일 전까지 요청

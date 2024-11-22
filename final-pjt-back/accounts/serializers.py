@@ -28,15 +28,27 @@ class UserLoginSerializer(LoginSerializer):
         attrs['user'] = user
         return attrs
 
+    def create(self, validated_data):
+        user = validated_data['user']
+        return {
+            'key': self.get_token(user),
+            'username': user.username,
+        }
+
 class UserDetailSerializer(UserDetailsSerializer) :
     class UserProductsSerializer(serializers.ModelSerializer):
+        user_product_id = serializers.IntegerField(source="id", read_only=True)
+        user = serializers.SerializerMethodField()
         class Meta:
             model = UserProducts
-            fields = '__all__'
-    user_products = UserProductsSerializer(many=True)
+            fields = ('user_product_id', 'fin_prdt_cd', 'fin_prdt_nm', 'product_type', 'kor_co_nm', 'created_at', 'user')
+        def get_user(self, obj):
+            return obj.user.username
+    user_products = UserProductsSerializer(many=True, read_only=True)
+    user_id = serializers.IntegerField(source="id", read_only=True)
     class Meta(UserDetailsSerializer.Meta) :
         model = User
-        fields = '__all__'
+        fields = ('user_id', 'email', 'username', 'user_products', 'age', 'assets', 'income', 'gender', 'date_joined', 'last_login', 'is_superuser')
 
 class UserUpdateSerializer(UserDetailsSerializer) :
     class Meta(UserDetailsSerializer.Meta):

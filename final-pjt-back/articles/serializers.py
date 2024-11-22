@@ -9,29 +9,35 @@ class ArticleCreateSerializer(serializers.ModelSerializer):
         read_only_fields = ('user',)
 class ArticleCommentsSerializer(serializers.ModelSerializer):
     comment_id = serializers.IntegerField(source="id", read_only=True)
-    user = serializers.SerializerMethodField()
+    username = serializers.SerializerMethodField()
+    email = serializers.SerializerMethodField()
     replies = serializers.SerializerMethodField()
+
     class Meta:
         model = Comment
-        fields = ('user', 'content', "comment_id", 'replies',)
+        fields = ('username', 'content', "comment_id",'email', 'replies', )
 
     def get_replies(self, obj):
         replies = Comment.objects.filter(main_comment=obj)
         return ArticleCommentsSerializer(replies, many=True).data
 
-    def get_user(self, obj):
+    def get_username(self, obj):
         return obj.user.username
+
+    def get_email(self, obj):
+        return obj.user.email
 
 
 class ArticleListSerializer(serializers.ModelSerializer):
     article_id = serializers.IntegerField(source="id", read_only=True)
     comments = serializers.SerializerMethodField()
-    user = serializers.SerializerMethodField()
+    username = serializers.SerializerMethodField()
     comment_count = serializers.SerializerMethodField()
+    email = serializers.SerializerMethodField()
     class Meta:
         model = Article
         exclude = ("id",)
-    def get_user(self, obj):
+    def get_username(self, obj):
         return obj.user.username
 
     def get_comments(self, obj):
@@ -40,6 +46,9 @@ class ArticleListSerializer(serializers.ModelSerializer):
 
     def get_comment_count(self, obj):
         return Comment.objects.filter(article = obj).count()
+
+    def get_email(self, obj):
+        return obj.user.email
 
 
 class CommentSerializer(serializers.ModelSerializer):

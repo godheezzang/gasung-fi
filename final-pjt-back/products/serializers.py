@@ -25,27 +25,35 @@ class InstallmentSavingsOptionsSerializer(serializers.ModelSerializer):
 
 class DepositListSerializer(serializers.ModelSerializer):
     class DepositListOptionsSerializer(serializers.ModelSerializer):
+        deposit_option_id = serializers.IntegerField(source="id", read_only=True)
         class Meta :
             model = DepositOptions
-            exclude = ("fin_prdt_cd",)
+            exclude = ("fin_prdt_cd", "id",)
+    deposit_id = serializers.IntegerField(source="id", read_only=True)
     options = DepositListOptionsSerializer(source='deposit_options', many=True, read_only=True)
     class Meta:
         model = Deposit
-        fields = '__all__'
+        exclude = ("id",)
 
 class InstallmentSavingsListSerializer(serializers.ModelSerializer):
     class InstallmentSavingsListOptionsSerializer(serializers.ModelSerializer):
+        installment_savings_option_id = serializers.IntegerField(source="id", read_only=True)
         class Meta :
             model = InstallmentSavingsOptions
-            exclude = ("fin_prdt_cd",)
+            exclude = ("fin_prdt_cd", 'id',)
+    installment_savings_id = serializers.IntegerField(source="id", read_only=True)
     options = InstallmentSavingsListOptionsSerializer(source='installment_savings_options', many=True, read_only=True)
     class Meta:
         model = InstallmentSavings
-        fields = '__all__'
+        exclude = ("id",)
 
 class UserProductsSerializer(serializers.ModelSerializer):
-    user = serializers.StringRelatedField(read_only=True)
+    user_product_id = serializers.IntegerField(source='id', read_only=True)
+    user = serializers.SerializerMethodField()
     class Meta:
         model = UserProducts
-        fields = '__all__'
+        exclude = ('id',)
         read_only_fields = ("user",)
+
+    def get_user(self, obj):
+        return obj.user.username
