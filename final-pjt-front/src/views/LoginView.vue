@@ -12,7 +12,7 @@
       />
       <label for="password">비밀번호</label>
       <input
-        type="text"
+        type="password"
         id="password"
         class="user-input"
         v-model="pwInput"
