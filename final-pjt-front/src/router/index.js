@@ -2,6 +2,7 @@ import App from "@/App.vue";
 import ArticleCreate from "@/components/Community/ArticleCreate.vue";
 import ArticleDetail from "@/components/Community/ArticleDetail.vue";
 import ExchangeCalculate from "@/components/ExchangeRate/ExchangeCalculate.vue";
+import ExchangeRateList from "@/components/ExchangeRate/ExchangeRateList.vue";
 import ProductDetail from "@/components/Product/ProductDetail.vue";
 import RecommendProduct from "@/components/Profile/RecommendProduct.vue";
 import { useUserStore } from "@/stores/user";
@@ -52,6 +53,11 @@ const router = createRouter({
       name: "exchange_rate",
       component: () => import("@/views/ExchangeRateView.vue"),
       children: [
+        {
+          path: "/",
+          name: "exchange_rate_home",
+          component: ExchangeRateList,
+        },
         {
           path: "/exchange-rate/calculate",
           name: "exchange-rate_calcuate",
