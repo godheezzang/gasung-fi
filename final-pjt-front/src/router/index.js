@@ -62,7 +62,7 @@ const router = createRouter({
     {
       path: "/search-bank",
       name: "search_bank",
-      component: () => import("@/views/SearchBankView.vue"),
+      component: () => import("@/views/MapView.vue"),
     },
     {
       path: "/community",
@@ -70,7 +70,7 @@ const router = createRouter({
       component: () => import("@/views/CommunityView.vue"),
     },
     {
-      path: "/cummunity/create",
+      path: "/community/create",
       name: "create_article",
       component: ArticleCreate,
     },

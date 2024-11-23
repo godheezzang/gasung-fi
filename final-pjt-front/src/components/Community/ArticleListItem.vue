@@ -21,7 +21,7 @@ const props = defineProps({
   article: Object,
 });
 
-console.log(props.article);
+// console.log(props.article);
 </script>
 
 <style scoped></style>
