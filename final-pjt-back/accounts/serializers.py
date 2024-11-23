@@ -41,7 +41,7 @@ class UserDetailSerializer(UserDetailsSerializer) :
     user_id = serializers.IntegerField(source="id", read_only=True)
     class Meta(UserDetailsSerializer.Meta) :
         model = User
-        fields = ('user_id', 'email', 'username', 'user_products', 'age', 'assets', 'income', 'gender', 'date_joined', 'last_login', 'is_superuser')
+        fields = ('user_id', 'email', 'username', 'user_products', 'age', 'assets', 'income', 'gender', 'date_joined', 'last_login', 'is_staff')
 
 class UserUpdateSerializer(UserDetailsSerializer) :
     class Meta(UserDetailsSerializer.Meta):
