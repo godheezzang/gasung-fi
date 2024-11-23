@@ -6,6 +6,10 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.authtoken.models import Token
+from django.contrib.auth import get_user_model
+import random
+from faker import Faker
 from .serializers import (DepositSerializer,
                           DepositOptionsSerializer,
                           InstallmentSavingsSerializer,
@@ -24,6 +28,8 @@ from gasung_fi import my_settings
 # Create your views here.
 BASE_URL = 'http://finlife.fss.or.kr/finlifeapi/'
 API_KEY = my_settings.FIN_API_KEY
+fake = Faker()
+User = get_user_model()
 
 def get_value_with_default(data, key, default) :
     return data.get(key, default) if data.get(key) is not None else default
@@ -275,3 +281,57 @@ def send_email(fin_prdt_cd, is_deposit):
         recipient_list,
         fail_silently=False,
     )
+
+@api_view(['POST',])
+def create_dummy_data(request) :
+    nums_user = int(request.data.get('nums_user', 10))
+    num_products_per_user = int(request.data.get('num_products_per_user', 5))
+    for _ in range(nums_user) :
+        user = User(
+            username=fake.user_name(),
+            email=fake.unique.email(),
+            age=random.randint(18, 70),  # 18세에서 70세 사이 랜덤 나이
+            assets=random.randint(1000, 100000),  # 1000에서 1000000 사이 랜덤 자산
+            income=random.randint(3000, 30000),  # 20000에서 200000 사이 랜덤 소득
+            gender=random.choice(['M', 'F'])  # 남성과 여성 중 랜덤 선택
+        )
+        user.set_password(fake.password())
+        user.save()
+        token, created = Token.objects.get_or_create(user=user)
+        existing_user_product_cds = set(UserProducts.objects.filter(user=user).values_list('fin_prdt_cd', flat=True))
+        existing_deposit_prdt_cd = set(Deposit.objects.values_list('fin_prdt_cd', flat=True))
+        existing_installment_savings_prdt_cd = set(InstallmentSavings.objects.values_list('fin_prdt_cd', flat=True))
+        total_prdt_cd = existing_deposit_prdt_cd.union(existing_installment_savings_prdt_cd)
+        available_prdt_cd = list(total_prdt_cd - existing_user_product_cds)
+        for _ in range(num_products_per_user) :
+            if not available_prdt_cd :
+                break
+            fin_prdt_cd = random.choice(available_prdt_cd)
+            deposit_product = Deposit.objects.filter(fin_prdt_cd=fin_prdt_cd).first()
+            if deposit_product:
+                kor_co_nm = deposit_product.kor_co_nm
+                fin_prdt_nm = deposit_product.fin_prdt_nm
+                product_type = "정기 예금"
+            else:
+                installment_product = InstallmentSavings.objects.filter(fin_prdt_cd=fin_prdt_cd).first()
+                if installment_product:
+                    kor_co_nm = installment_product.kor_co_nm
+                    fin_prdt_nm = installment_product.fin_prdt_nm
+                    product_type = "정기 적금"
+                else:
+                    continue
+
+            product = UserProducts(
+                user=user,
+                fin_prdt_cd=fin_prdt_cd,
+                product_type=product_type,
+                kor_co_nm=kor_co_nm,
+                fin_prdt_nm=fin_prdt_nm
+            )
+            product.save()
+            available_prdt_cd.remove(fin_prdt_cd)
+    message = {
+        "status" : "success",
+        "message" : f"{nums_user}명의 유저가 생성되었습니다."
+    }
+    return Response(message, status=status.HTTP_201_CREATED)
