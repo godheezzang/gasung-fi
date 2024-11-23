@@ -1,7 +1,11 @@
 <template>
-  <div>BankSearch</div>
+  <div>
+    <Search />
+  </div>
 </template>
 
-<script setup></script>
+<script setup>
+import Search from "@/components/Common/Search.vue";
+</script>
 
 <style scoped></style>
