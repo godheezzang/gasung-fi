@@ -70,13 +70,14 @@ SOCIALACCOUNT_PROVIDERS ={
 
 "naver": {
 "APP": {
-"client_id": ("발급받은 client id값"),
-"secret": ("발급받은 client secret값"),
+"client_id": my_settings.NAVER_CLIENT_ID,
+"secret": my_settings.NAVER_CLIENT_SECRET,
 "key": ""
 },
 
 "SCOPE": [
-
+    'email',
+    'name',
 ],
 
 "AUTH_PARAMS": {
