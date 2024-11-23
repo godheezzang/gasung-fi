@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+
+from . import my_settings
 from .my_settings import MY_DATABASES, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -48,6 +50,55 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
 ]
 
+SOCIALACCOUNT_PROVIDERS ={
+"kakao": {
+"APP": {
+"client_id": my_settings.KAKAO_API_KEY,
+"secret": "",
+"key": ""
+},
+
+"SCOPE": [
+    'profile',
+    'account_email',
+],
+
+"AUTH_PARAMS": {
+"access_type": "online",
+'prompt': 'select_account',
+}},
+
+"naver": {
+"APP": {
+"client_id": ("발급받은 client id값"),
+"secret": ("발급받은 client secret값"),
+"key": ""
+},
+
+"SCOPE": [
+
+],
+
+"AUTH_PARAMS": {
+"access_type": "online",
+'prompt': 'select_account',
+}},
+
+"google": {
+"APP": {
+"client_id": my_settings.GOOGLE_CLIENT_ID,
+"secret": my_settings.GOOGLE_CLIENT_SECRET,
+"key": ""
+},
+"SCOPE": [
+    "profile",
+    "email",
+],
+"AUTH_PARAMS": {
+"access_type": "online",
+'prompt': 'select_account',
+}}}
+
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS' : 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -58,6 +109,11 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     ]
 }
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
 
 SPECTACULAR_SETTINGS = {
     # General schema metadata. Refer to spec for valid inputs
@@ -96,6 +152,9 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.kakao',
+    'allauth.socialaccount.providers.naver',
     'dj_rest_auth.registration',
     'django.contrib.admin',
     'django.contrib.auth',
