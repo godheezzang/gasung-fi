@@ -3,9 +3,14 @@ import requests
 from django.conf import settings
 from django.core.mail import send_mail
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.authtoken.models import Token
+from django.contrib.auth import get_user_model
+import random
+from faker import Faker
+import pandas as pd
 from .serializers import (DepositSerializer,
                           DepositOptionsSerializer,
                           InstallmentSavingsSerializer,
@@ -24,6 +29,8 @@ from gasung_fi import my_settings
 # Create your views here.
 BASE_URL = 'http://finlife.fss.or.kr/finlifeapi/'
 API_KEY = my_settings.FIN_API_KEY
+fake = Faker()
+User = get_user_model()
 
 def get_value_with_default(data, key, default) :
     return data.get(key, default) if data.get(key) is not None else default
@@ -275,3 +282,104 @@ def send_email(fin_prdt_cd, is_deposit):
         recipient_list,
         fail_silently=False,
     )
+
+@api_view(['POST',])
+@permission_classes([IsAdminUser])
+def create_dummy_data(request) :
+    nums_user = int(request.data.get('nums_user', 10))
+    num_products_per_user = int(request.data.get('num_products_per_user', 5))
+    existing_deposit_prdt_cd = set(Deposit.objects.values_list('fin_prdt_cd', flat=True))
+    existing_installment_savings_prdt_cd = set(InstallmentSavings.objects.values_list('fin_prdt_cd', flat=True))
+    total_prdt_cd = existing_deposit_prdt_cd.union(existing_installment_savings_prdt_cd)
+    users_to_create = []
+    products_to_create = []
+    for _ in range(nums_user) :
+        while True :
+            email = fake.unique.email()
+            if not User.objects.filter(email=email).exists():
+                break
+        user = User(
+            username=fake.user_name(),
+            email=email,
+            age=random.randint(18, 70),
+            assets=random.randint(1000, 100000),
+            income=random.randint(3000, 30000),
+            gender=random.choice(['M', 'F'])
+        )
+        user.set_password(fake.password())
+        users_to_create.append(user)
+
+    User.objects.bulk_create(users_to_create)
+    for user in users_to_create:
+        save_user = get_object_or_404(User, email = user.email)
+        token, created = Token.objects.get_or_create(user=save_user)
+        existing_user_product_cds = set(UserProducts.objects.filter(user=save_user).values_list('fin_prdt_cd', flat=True))
+        available_prdt_cd = list(total_prdt_cd - existing_user_product_cds)
+        for _ in range(num_products_per_user) :
+            if not available_prdt_cd :
+                break
+            fin_prdt_cd = random.choice(available_prdt_cd)
+            deposit_product = Deposit.objects.filter(fin_prdt_cd=fin_prdt_cd).first()
+            if deposit_product:
+                kor_co_nm = deposit_product.kor_co_nm
+                fin_prdt_nm = deposit_product.fin_prdt_nm
+                product_type = "정기 예금"
+            else:
+                installment_product = InstallmentSavings.objects.filter(fin_prdt_cd=fin_prdt_cd).first()
+                if installment_product:
+                    kor_co_nm = installment_product.kor_co_nm
+                    fin_prdt_nm = installment_product.fin_prdt_nm
+                    product_type = "정기 적금"
+                else:
+                    continue
+
+            products_to_create.append(UserProducts(
+                user=save_user,
+                fin_prdt_cd=fin_prdt_cd,
+                product_type=product_type,
+                kor_co_nm=kor_co_nm,
+                fin_prdt_nm=fin_prdt_nm
+            ))
+            available_prdt_cd.remove(fin_prdt_cd)
+    UserProducts.objects.bulk_create(products_to_create)
+    message = {
+        "status" : "success",
+        "message" : f"{nums_user}명의 유저가 생성되었습니다."
+    }
+    return Response(message, status=status.HTTP_201_CREATED)
+
+@api_view(['GET',])
+@permission_classes([IsAuthenticated])
+def recommend_list(request) :
+    user = request.user
+    age = user.age
+    assets = user.assets
+    income = user.income
+    all_users = User.objects.all().values('id', 'income', 'age', 'assets')
+    df_users = pd.DataFrame(all_users)
+    similar_users = df_users[
+        (df_users['age'] >= age - 5) & (df_users['age'] <= age + 5) &
+        (df_users["income"] >= income - 1000) & (df_users["income"] <= income + 1000) &
+        (df_users['assets'] >= assets - 10000) & (df_users['assets'] <= assets + 10000)
+    ]
+
+    similar_users_ids = similar_users['id'].tolist()
+    user_products = UserProducts.objects.filter(user_id__in=similar_users_ids)
+    recommended_products = (UserProducts.objects.filter(user_id__in=similar_users_ids).exclude(fin_prdt_cd__in=user_products))
+    df_products = pd.DataFrame(list(recommended_products.values('fin_prdt_nm', 'product_type', 'kor_co_nm')))
+    product_counts = df_products.groupby(['fin_prdt_nm', 'product_type', 'kor_co_nm']).size().reset_index(name='count')
+    top_products = product_counts.sort_values(by='count', ascending=False).head(10)
+    result = [
+        {
+            "fin_prdt_nm" : row['fin_prdt_nm'],
+            "product_type": row['product_type'],
+            "kor_co_nm": row['kor_co_nm'],
+            "count": row['count']
+        }
+        for _, row in top_products.iterrows()
+    ]
+    return Response(result, status=status.HTTP_200_OK)
+
+
+
+

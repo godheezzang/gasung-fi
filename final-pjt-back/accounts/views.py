@@ -4,7 +4,6 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from dj_rest_auth.registration.views import LoginView
-
 from accounts.serializers import (UserDetailSerializer,
                                   UserUpdateSerializer)
 
@@ -36,3 +35,4 @@ class CustomLoginView(LoginView) :
         response_data = super().get_response().data
         response_data['username'] = self.serializer.validated_data['user'].username
         return Response(response_data, status=status.HTTP_200_OK)
+
