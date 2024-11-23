@@ -4,7 +4,7 @@
     <div>
       <p>글 번호: {{ article.article_id }}</p>
       <p>제목: {{ article.title }}</p>
-      <p>작성자: {{ article.user }}</p>
+      <p>작성자: {{ article.username }}</p>
       <hr />
       <p>작성일: {{ formattedCreatedAt }}</p>
       <p>수정일: {{ formattedUpdatedAt }}</p>
@@ -17,19 +17,14 @@
       <p>
         <span>{{ article.comment_count }}개의 댓글</span>
       </p>
-      <CommentListItem
-        v-if="article.comment_count"
-        v-for="comment in article.comments"
-        :key="comment.comment_id"
-        :comment="comment"
-      />
+      <CommentListItem v-if="article.comment_count" v-for="comment in article.comments" :key="comment.comment_id" :comment="comment" />
       <div v-if="!article.comment_count">댓글이 없습니다.</div>
     </div>
     <CommentCreate />
     <!-- TODO: 사용자 동일 여부에 따라 삭제, 수정버튼 렌더링 -->
     <Button content="목록" :onClick="moveToList" ariaLabel="게시글 목록" />
-    <Button content="삭제" :onClick="handleDelete" ariaLabel="게시글 삭제" />
-    <Button content="수정" :onClick="moveToUpdate" ariaLabel="게시글 수정" />
+    <Button v-if="article.email === store.userEmail" content="삭제" :onClick="handleDelete" ariaLabel="게시글 삭제" />
+    <Button v-if="article.email === store.userEmail" content="수정" :onClick="moveToUpdate" ariaLabel="게시글 수정" />
   </div>
 </template>
 
@@ -72,14 +67,11 @@ const handleDelete = async () => {
   window.confirm("게시글을 삭제하시겠습니까?");
   if (confirm) {
     try {
-      const response = await axios.delete(
-        `${import.meta.env.VITE_BASE_URL}/articles/${articleId}/`,
-        {
-          headers: {
-            Authorization: `Token ${store.token}`,
-          },
-        }
-      );
+      const response = await axios.delete(`${import.meta.env.VITE_BASE_URL}/articles/${articleId}/`, {
+        headers: {
+          Authorization: `Token ${store.token}`,
+        },
+      });
 
       // console.log(response);
       if (response.status === 204) {
@@ -97,9 +89,7 @@ const moveToUpdate = () => {
 
 const getDetailArticle = async () => {
   try {
-    const response = await axios.get(
-      `${import.meta.env.VITE_BASE_URL}/articles/${articleId}/`
-    );
+    const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/articles/${articleId}/`);
 
     if (response.status === 200) {
       console.log(response);

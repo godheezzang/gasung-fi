@@ -1,7 +1,7 @@
 <template>
   <div class="comment-container">
     <!-- {{ comment }} -->
-    <p>{{ comment.user }}</p>
+    <p>{{ comment.username }}</p>
     <p>{{ comment.content }}</p>
     <button @click="handleDelete" v-if="isCurrentUser">삭제</button>
     <button @click="toggleReply" v-if="!isComment">
@@ -10,20 +10,9 @@
     <button @click="handleUpdate" v-if="isCurrentUser">수정</button>
 
     <div v-if="comment.replies" class="reply-container">
-      <CommentListItem
-        v-for="reply in comment.replies"
-        :key="reply.comment_id"
-        :comment="reply"
-        :isComment="true"
-      />
+      <CommentListItem v-for="reply in comment.replies" :key="reply.comment_id" :comment="reply" :isComment="true" />
     </div>
-    <CommentCreate
-      v-if="isReply"
-      :isReply="true"
-      :parentId="comment.comment_id"
-      @close="isReply = false"
-      class="reply-container"
-    />
+    <CommentCreate v-if="isReply" :isReply="true" :parentId="comment.comment_id" @close="isReply = false" class="reply-container" />
   </div>
 </template>
 
@@ -49,37 +38,34 @@ const store = useUserStore();
 const articleId = route.params.article_id;
 const isReply = ref(false);
 
-const CommentListItem = defineAsyncComponent(() =>
-  import("@/components/Community/CommentListItem.vue")
-);
+const CommentListItem = defineAsyncComponent(() => import("@/components/Community/CommentListItem.vue"));
 
-const userEmail = computed(() => sessionStorage.getItem("userEmail"));
+// console.log(props.comment);
+
+const userEmail = computed(() => sessionStorage.getItem("userEmail").replace(/"/g, ""));
 const isCurrentUser = computed(() => {
   // console.log("userEmail:", userEmail.value);
-  // console.log("commentUser:", String(props.comment.user));
-  return String(userEmail.value) === String(props.comment.user);
+  // console.log("commentUser:", String(props.comment.email));
+
+  // console.log(typeof userEmail.value);
+  // console.log(typeof props.comment.email);
+
+  return String(userEmail.value) === String(props.comment.email);
 });
 
 console.log("isCurrentUser:", isCurrentUser.value);
 
-// console.log("userEmail: ", userEmail.value);
-// console.log("props.comment:", props.comment.user);
 const toggleReply = () => {
   isReply.value = !isReply.value;
 };
 
 const handleDelete = async () => {
   try {
-    const response = await axios.delete(
-      `${import.meta.env.VITE_BASE_URL}/articles/${articleId}/comments/${
-        props.comment.comment_id
-      }`,
-      {
-        headers: {
-          Authorization: `Token ${store.token}`,
-        },
-      }
-    );
+    const response = await axios.delete(`${import.meta.env.VITE_BASE_URL}/articles/${articleId}/comments/${props.comment.comment_id}`, {
+      headers: {
+        Authorization: `Token ${store.token}`,
+      },
+    });
 
     console.log(response);
   } catch (error) {}
