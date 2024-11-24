@@ -54,7 +54,7 @@ const router = createRouter({
       component: () => import("@/views/ExchangeRateView.vue"),
       children: [
         {
-          path: "/",
+          path: "/exchange-rate",
           name: "exchange_rate_home",
           component: ExchangeRateList,
         },
@@ -90,6 +90,16 @@ const router = createRouter({
       name: "products",
       component: () => import("@/views/ProductView.vue"),
       children: [
+        {
+          path: "/products/deposits",
+          name: "product_deposits",
+          component: () => import("@/components/Product/DepositList.vue"),
+        },
+        {
+          path: "/products/savings",
+          name: "product_savings",
+          component: () => import("@/components/Product/SavingList.vue"),
+        },
         {
           path: "/products/:product_id",
           name: "product_detail",
