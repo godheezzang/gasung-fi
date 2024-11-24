@@ -50,6 +50,7 @@ def get_deposit_product(request):
             if not Deposit.objects.filter(fin_prdt_cd=product.get("fin_prdt_cd")).exists():
                 serializer = DepositSerializer(data={
                     'fin_prdt_cd': product.get("fin_prdt_cd"),
+                    'dcls_month' : get_value_with_default(product, 'dcls_month', '-'),
                     'mtrt_int' : get_value_with_default(product, 'mtrt_int', '-'),
                     'fin_prdt_nm' : get_value_with_default(product, 'fin_prdt_nm', '-'),
                     'kor_co_nm': get_value_with_default(product, "kor_co_nm", "-"),
@@ -101,6 +102,7 @@ def get_installment_savings_products(request):
             if not InstallmentSavings.objects.filter(fin_prdt_cd=product.get("fin_prdt_cd")).exists():
                 serializer = InstallmentSavingsSerializer(data={
                     'fin_prdt_cd': product.get("fin_prdt_cd"),
+                    'dcls_month' : get_value_with_default(product, 'dcls_month', '-'),
                     'mtrt_int' : get_value_with_default(product, 'mtrt_int', '-'),
                     'kor_co_nm': get_value_with_default(product, "kor_co_nm", "-"),
                     'fin_prdt_nm': get_value_with_default(product, "fin_prdt_nm", "-"),

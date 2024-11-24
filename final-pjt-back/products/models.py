@@ -3,6 +3,7 @@ from django.conf import settings
 # Create your models here.
 class Deposit(models.Model):
     fin_prdt_cd = models.CharField(max_length=255, unique=True)
+    dcls_month = models.TextField()
     kor_co_nm = models.TextField()
     fin_prdt_nm = models.TextField()
     mtrt_int = models.TextField()
@@ -21,6 +22,7 @@ class DepositOptions(models.Model):
 
 class InstallmentSavings(models.Model):
     fin_prdt_cd = models.CharField(max_length=255, unique=True)
+    dcls_month = models.TextField()
     kor_co_nm = models.TextField()
     fin_prdt_nm = models.TextField()
     mtrt_int = models.TextField()
