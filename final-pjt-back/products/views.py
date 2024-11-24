@@ -367,11 +367,12 @@ def recommend_list(request) :
     similar_users_ids = similar_users['id'].tolist()
     user_products = UserProducts.objects.filter(user_id__in=similar_users_ids)
     recommended_products = (UserProducts.objects.filter(user_id__in=similar_users_ids).exclude(fin_prdt_cd__in=user_products))
-    df_products = pd.DataFrame(list(recommended_products.values('fin_prdt_nm', 'product_type', 'kor_co_nm')))
-    product_counts = df_products.groupby(['fin_prdt_nm', 'product_type', 'kor_co_nm']).size().reset_index(name='count')
+    df_products = pd.DataFrame(list(recommended_products.values('fin_prdt_cd','fin_prdt_nm', 'product_type', 'kor_co_nm')))
+    product_counts = df_products.groupby(['fin_prdt_cd','fin_prdt_nm', 'product_type', 'kor_co_nm']).size().reset_index(name='count')
     top_products = product_counts.sort_values(by='count', ascending=False).head(10)
     result = [
         {
+            "fin_prdt_cd" : row['fin_prdt_cd'],
             "fin_prdt_nm" : row['fin_prdt_nm'],
             "product_type": row['product_type'],
             "kor_co_nm": row['kor_co_nm'],
