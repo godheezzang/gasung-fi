@@ -26,7 +26,7 @@ const moveToCreate = () => {
 const getArticles = async () => {
   try {
     const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/articles/`);
-    console.log(response);
+    // console.log(response);
     const contentType = response.headers["content-type"];
     if (response.status === 200 && response.data) {
       articles.value = response?.data;

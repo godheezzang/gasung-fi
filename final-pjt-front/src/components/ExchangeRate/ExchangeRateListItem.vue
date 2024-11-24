@@ -21,7 +21,7 @@ const props = defineProps({
   rate: Object,
 });
 
-console.log(props.rate);
+// console.log(props.rate);
 </script>
 
 <style scoped></style>
