@@ -67,24 +67,28 @@ const handleJoin = async () => {
   const url = getUrl();
   // console.log(url);
 
-  try {
-    const response = await axios({
-      method: "post",
-      url,
-      headers: {
-        Authorization: `Token ${store.token}`,
-      },
-    });
+  const confirmed = window.confirm("상품을 찜하시겠습니까?");
+  if (confirmed) {
+    try {
+      const response = await axios({
+        method: "post",
+        url,
+        headers: {
+          Authorization: `Token ${store.token}`,
+        },
+      });
 
-    // console.log(response.data);
-    // 상품 가입 후 사용자 상품 목록 요청
-    store.getUserProducts();
-    alreadyJoined.value = true;
-    alert("상품 가입이 완료되었습니다.");
-  } catch (error) {
-    console.error(error);
-    alert("상품 가입에 실패했어요!");
+      // console.log(response.data);
+      // 상품 가입 후 사용자 상품 목록 요청
+      store.getUserProducts();
+      alreadyJoined.value = true;
+      alert("상품 가입이 완료되었습니다.");
+    } catch (error) {
+      console.error(error);
+      alert("상품 가입에 실패했어요!");
+    }
   }
+  return;
 };
 
 // 가입 제한 설명 변환 로직
