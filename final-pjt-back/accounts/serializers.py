@@ -1,5 +1,5 @@
 from dj_rest_auth.serializers import LoginSerializer, UserDetailsSerializer
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from rest_framework import serializers
 from products.models import UserProducts
@@ -19,11 +19,8 @@ class UserLoginSerializer(LoginSerializer):
     def validate(self,attrs):
         email = attrs.get('email')
         password = attrs.get('password')
-        try:
-            user = User.objects.get(email=email)
-        except User.DoesNotExist:
-            raise serializers.ValidationError("이메일 또는 비밀번호가 잘못되었습니다.")
-        if not user.check_password(password):
+        user = authenticate(username=email, password=password, backend='django.contrib.auth.backends.ModelBackend')
+        if user is None:
             raise serializers.ValidationError("이메일 또는 비밀번호가 잘못되었습니다.")
         attrs['user'] = user
         return attrs

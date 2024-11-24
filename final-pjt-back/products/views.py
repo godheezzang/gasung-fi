@@ -239,11 +239,11 @@ def deposit_intr_rate_update(request, fin_prdt_cd, save_trm) :
 
 @api_view(['PUT',])
 @permission_classes([IsAdminUser])
-def installment_savings_intr_rate_update(request, fin_prdt_cd, save_trm, rsrv_type) :
+def installment_savings_intr_rate_update(request, fin_prdt_cd, save_trm, installment_savings_option_id) :
     installment_savings_option = get_object_or_404(InstallmentSavingsOptions,
                                                    fin_prdt_cd=fin_prdt_cd,
                                                    save_trm=save_trm,
-                                                   rsrv_type=rsrv_type)
+                                                   installment_savings_option_id=installment_savings_option_id)
     serializer = InstallmentSavingsOptionsUpdateSerializer(installment_savings_option, data=request.data, partial=True)
     if serializer.is_valid(raise_exception=True):
         serializer.save()

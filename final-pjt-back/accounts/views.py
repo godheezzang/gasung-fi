@@ -33,6 +33,10 @@ def user_detail(request):
 class CustomLoginView(LoginView) :
     def get_response(self):
         response_data = super().get_response().data
-        response_data['username'] = self.serializer.validated_data['user'].username
+        user = self.serializer.validated_data['user']
+        backend = 'diango.contrib.auth.backends.ModelBackend'
+        user.backend = backend
+        response_data['username'] = user.username
+        response_data['is_staff'] = user.is_staff
         return Response(response_data, status=status.HTTP_200_OK)
 
