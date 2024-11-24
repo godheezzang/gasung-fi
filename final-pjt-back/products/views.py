@@ -228,8 +228,8 @@ def installment_savings_search(request) :
 
 @api_view(['PUT',])
 @permission_classes([IsAdminUser])
-def deposit_intr_rate_update(request, fin_prdt_cd, depotis_option_id) :
-    deposit_option = get_object_or_404(DepositOptions, fin_prdt_cd=fin_prdt_cd, pk=depotis_option_id)
+def deposit_intr_rate_update(request, fin_prdt_cd, deposit_option_id) :
+    deposit_option = get_object_or_404(DepositOptions, fin_prdt_cd=fin_prdt_cd, pk=deposit_option_id)
     serializer = DepositOptionsUpdateSerializer(deposit_option, data=request.data, partial=True)
     if serializer.is_valid(raise_exception=True):
         serializer.save()
