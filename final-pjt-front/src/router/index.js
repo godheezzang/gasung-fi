@@ -4,6 +4,7 @@ import ArticleDetail from "@/components/Community/ArticleDetail.vue";
 import ExchangeCalculate from "@/components/ExchangeRate/ExchangeCalculate.vue";
 import ExchangeRateList from "@/components/ExchangeRate/ExchangeRateList.vue";
 import ProductDetail from "@/components/Product/ProductDetail.vue";
+import ProductUpdate from "@/components/Product/ProductUpdate.vue";
 import Recommend from "@/components/Product/RecommendList.vue";
 import ChangePassword from "@/components/Profile/ChangePassword.vue";
 import MyProductList from "@/components/Profile/MyProductList.vue";
@@ -124,6 +125,11 @@ const router = createRouter({
           name: "product_recommend",
           component: Recommend,
           meta: { requiresAuth: true }, // 인증 필요 페이지
+        },
+        {
+          path: "products/:product_id/:option_id/edit",
+          name: "product_edit",
+          component: ProductUpdate,
         },
       ],
     },

@@ -2,7 +2,7 @@
   <div>
     <h1>상품 상세 페이지</h1>
     <Button :content="alreadyJoined ? '찜 완료' : '찜하기'" :onClick="alreadyJoined ? null : handleJoin" ariaLabel="찜하기" :customClass="alreadyJoined ? 'disabled-btn' : ''" />
-    <Button v-if="store.isStaff" content="금리 수정" :onClick="handleUpdateProduct" ariaLabel="금리 수정" />
+
     <div v-if="product">
       <p>공시 제출월: {{ product.dcls_month }}</p>
       <p>금융 회사명: {{ product.kor_co_nm }}</p>
@@ -12,6 +12,23 @@
       <p>가입 대상: {{ product.join_member }}</p>
       <p>만기 후 이자율: {{ product.mtrt_int }}</p>
       <p>우대 조건: {{ product.spcl_cnd }}</p>
+      <div class="product-options">
+        <li v-for="option in product.options" :key="option.deposit_option_id ? option.deposit_option_id : option.installment_savings_option_id">
+          <!-- {{ option }} -->
+          <p>저축 금리 유형: {{ option.intr_rate_type }}</p>
+          <p>저축 금리 유형명: {{ option.intr_rate_type_nm }}</p>
+          <p>저축 기간: {{ option.save_trm }}</p>
+          <p>저축 금리: {{ option.intr_rate }}</p>
+          <p>최고 우대금리: {{ option.intr_rate2 }}</p>
+          <Button
+            v-if="store.isStaff"
+            content="금리 수정"
+            :onClick="() => moveToUpdateRate(option.deposit_option_id ? option.deposit_option_id : option.installment_savings_option_id)"
+            ariaLabel="금리 수정"
+          />
+          <hr />
+        </li>
+      </div>
     </div>
   </div>
 </template>
@@ -33,6 +50,18 @@ const product = ref({});
 const alreadyJoined = ref(false);
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
+
+const moveToUpdateRate = (optionId) => {
+  console.log(optionId);
+
+  router.push({
+    name: "product_edit",
+    params: { product_id: finPrdtCd, option_id: optionId },
+    query: {
+      product_type: productType,
+    },
+  });
+};
 
 // 이미 가입한 상품 목록에서 해당 상품이 있는지 확인
 
