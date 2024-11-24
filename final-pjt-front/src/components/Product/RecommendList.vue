@@ -1,7 +1,9 @@
 <template>
   <div>
     <h1>상품 추천 목록</h1>
+    <!-- <RouterLink :to="{ name: 'product_detail', params: { product_id: product.fin_prdt_cd } }"> -->
     <RecommendListItem v-for="product in recommendProducts" :key="product.fin_prdt_nm" :product="product" />
+    <!-- </RouterLink> -->
   </div>
 </template>
 

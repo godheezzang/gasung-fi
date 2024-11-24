@@ -23,6 +23,8 @@ stages:          # List of stages for jobs, and their order of execution
 build-vue:       # This job runs in the build stage, which runs first.
   stage: build
   image: node:14
+  tags:
+    - gasung-fi
   script:
     - cd final-pjt-front
     - npm install
@@ -34,6 +36,8 @@ build-vue:       # This job runs in the build stage, which runs first.
 build-django:       # This job runs in the build stage, which runs first.
   stage: build
   image: python:3.12
+  tags:
+    - gasung-fi
   script:
     - cd final-pjt-back
     - pip install -r requirements.txt
@@ -45,6 +49,8 @@ build-django:       # This job runs in the build stage, which runs first.
 deploy:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
   image: ruby:2.7
+  tags:
+    - gasung-fi
   script:
     - apt-get update -y
     - apt-get install -y openssh-client
