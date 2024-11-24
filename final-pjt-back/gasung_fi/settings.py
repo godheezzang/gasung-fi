@@ -28,6 +28,8 @@ SECRET_KEY = 'django-insecure-9m8gs^wx^4!s%quu^6r_^a2bgu)01o&9y3)%*jitz6zk2=3za4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.naver.com'
 EMAIL_PORT = 587
@@ -36,7 +38,7 @@ EMAIL_HOST_USER = EMAIL_HOST_USER
 EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['43.200.128.146']
 
 AUTH_USER_MODEL = 'accounts.User'
 
