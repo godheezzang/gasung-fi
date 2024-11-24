@@ -4,6 +4,7 @@ from django.urls import path
 from accounts import views
 from accounts.serializers import UserLoginSerializer, UserRegisterSerializer
 from .views import CustomLoginView
+from allauth.socialaccount import views as social_views
 
 urlpatterns = [
     path('login/', CustomLoginView.as_view(serializer_class=UserLoginSerializer)),
