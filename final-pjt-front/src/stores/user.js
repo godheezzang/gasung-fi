@@ -9,12 +9,19 @@ export const useUserStore = defineStore("user", () => {
   const userEmail = ref(null);
   const username = ref(null);
   const router = useRouter();
+  const isStaff = ref(false);
+  const userProducts = ref([]);
+  const password = ref(null);
 
   onMounted(() => {
     const storedIsLoggedIn = JSON.parse(sessionStorage.getItem("isLoggedIn"));
     const storedToken = JSON.parse(sessionStorage.getItem("userToken"));
     const storedEmail = JSON.parse(sessionStorage.getItem("userEmail"));
     const storedUsername = JSON.parse(sessionStorage.getItem("username"));
+    const storedIsStaff = JSON.parse(sessionStorage.getItem("isStaff"));
+    const storedUserProducts = JSON.parse(sessionStorage.getItem("userProducts"));
+
+    // console.log(storedIsStaff);
 
     // console.log(storedEmail);
     if (storedIsLoggedIn && storedToken) {
@@ -22,6 +29,9 @@ export const useUserStore = defineStore("user", () => {
       token.value = storedToken;
       userEmail.value = storedEmail;
       username.value = storedUsername;
+      isStaff.value = storedIsStaff;
+      userProducts.value = storedUserProducts;
+      // console.log(isStaff.value);
     }
   });
 
@@ -66,15 +76,22 @@ export const useUserStore = defineStore("user", () => {
         },
       });
 
+      console.log(response.data);
+
       userEmail.value = data.email;
       token.value = response.data.key;
       username.value = response.data.username;
       isLoggedIn.value = true;
+      isStaff.value = response.data.is_staff;
+      userProducts.value = response.data.user_products;
+      password.value = data.password ? data.password : data.password1;
 
       sessionStorage.setItem("userToken", JSON.stringify(token.value));
       sessionStorage.setItem("isLoggedIn", JSON.stringify(isLoggedIn.value));
       sessionStorage.setItem("userEmail", JSON.stringify(userEmail.value));
       sessionStorage.setItem("username", JSON.stringify(username.value));
+      sessionStorage.setItem("isStaff", JSON.stringify(isStaff.value));
+      sessionStorage.setItem("userProducts", JSON.stringify(userProducts.value));
 
       router.push({ name: "home" });
     } catch (error) {
@@ -87,13 +104,35 @@ export const useUserStore = defineStore("user", () => {
     token.value = null;
     userEmail.value = null;
     username.value = null;
+    isStaff.value = null;
     isLoggedIn.value = false;
 
     sessionStorage.removeItem("userToken");
     sessionStorage.removeItem("isLoggedIn");
     sessionStorage.removeItem("userEmail");
     sessionStorage.removeItem("username");
+    sessionStorage.removeItem("isStaff");
+
+    router.push({ name: "home" });
   };
 
-  return { isLoggedIn, token, login, logout, signup, username, userEmail };
+  const getUserProducts = async () => {
+    try {
+      const response = await axios({
+        method: "get",
+        url: `${import.meta.env.VITE_BASE_URL}/accounts/detail/`,
+        headers: {
+          Authorization: `Token ${token.value}`,
+        },
+      });
+
+      // console.log(response.data.user_products);
+      userProducts.value = response.data.user_products;
+      sessionStorage.setItem("userProducts", JSON.stringify(userProducts.value));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return { isLoggedIn, token, login, logout, signup, username, userEmail, isStaff, userProducts, getUserProducts, password };
 });
