@@ -114,6 +114,7 @@ const handleUpdate = async () => {
     });
 
     console.log(response);
+    alert("정보가 변경되었습니다.");
   } catch (error) {
     console.error(error);
   }
