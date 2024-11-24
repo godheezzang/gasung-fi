@@ -34,21 +34,14 @@ const alreadyJoined = ref(false);
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-// productType에 따라 요청 url 선택하는 로직
-const getUrl = () => {
-  return productType === "saving" ? `${BASE_URL}/products/installment_savings/${finPrdtCd}/` : `${BASE_URL}/products/deposit/${finPrdtCd}/`;
-};
-
-console.log(store.userProducts);
-
-// const productToJoin = {
-//   id: finPrdtCd, // 가입할 상품 ID
-// };
-
 // 이미 가입한 상품 목록에서 해당 상품이 있는지 확인
+
 const checkAlreadyJoined = () => {
   alreadyJoined.value = store.userProducts.some((userProduct) => userProduct.fin_prdt_cd === finPrdtCd);
+  return alreadyJoined.value;
 };
+
+alreadyJoined.value = checkAlreadyJoined();
 
 const handleJoin = async () => {
   if (!store.isLoggedIn) {
@@ -80,7 +73,7 @@ const handleJoin = async () => {
 
       // console.log(response.data);
       // 상품 가입 후 사용자 상품 목록 요청
-      store.getUserProducts();
+      await store.getUserProducts();
       alreadyJoined.value = true;
       alert("상품 가입이 완료되었습니다.");
     } catch (error) {
@@ -88,7 +81,6 @@ const handleJoin = async () => {
       alert("상품 가입에 실패했어요!");
     }
   }
-  return;
 };
 
 // 가입 제한 설명 변환 로직
@@ -99,6 +91,14 @@ const changeJoinDenyDesc = (joinDeny) => {
     3: "일부 제한",
   };
   return descriptions[joinDeny] || "정보 없음";
+};
+
+// TODO: 상품 상세 정보 불러오는 함수를 productStore에 옮기기
+// 이유: 내 상품 확인에서도 사용함. 리팩토링 할 때 이동할 것
+
+// productType에 따라 요청 url 선택하는 로직
+const getUrl = () => {
+  return productType === "saving" ? `${BASE_URL}/products/installment_savings/${finPrdtCd}/` : `${BASE_URL}/products/deposit/${finPrdtCd}/`;
 };
 
 // 상품 상세 정보 불러오는 로직

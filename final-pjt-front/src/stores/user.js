@@ -12,6 +12,9 @@ export const useUserStore = defineStore("user", () => {
   const isStaff = ref(false);
   const userProducts = ref([]);
   const password = ref(null);
+  const gender = ref(null);
+  const income = ref(null);
+  const assets = ref(null);
 
   onMounted(() => {
     const storedIsLoggedIn = JSON.parse(sessionStorage.getItem("isLoggedIn"));
@@ -20,6 +23,9 @@ export const useUserStore = defineStore("user", () => {
     const storedUsername = JSON.parse(sessionStorage.getItem("username"));
     const storedIsStaff = JSON.parse(sessionStorage.getItem("isStaff"));
     const storedUserProducts = JSON.parse(sessionStorage.getItem("userProducts"));
+    const storedUserGender = JSON.parse(sessionStorage.getItem("userGender"));
+    const storedUserIncome = JSON.parse(sessionStorage.getItem("userIncome"));
+    const storedUserAssets = JSON.parse(sessionStorage.getItem("userAssets"));
 
     // console.log(storedIsStaff);
 
@@ -31,6 +37,9 @@ export const useUserStore = defineStore("user", () => {
       username.value = storedUsername;
       isStaff.value = storedIsStaff;
       userProducts.value = storedUserProducts;
+      gender.value = storedUserGender;
+      income.value = storedUserIncome;
+      assets.value = storedUserAssets;
       // console.log(isStaff.value);
     }
   });
@@ -76,7 +85,7 @@ export const useUserStore = defineStore("user", () => {
         },
       });
 
-      console.log(response.data);
+      // console.log(response.data);
 
       userEmail.value = data.email;
       token.value = response.data.key;
@@ -134,5 +143,28 @@ export const useUserStore = defineStore("user", () => {
     }
   };
 
-  return { isLoggedIn, token, login, logout, signup, username, userEmail, isStaff, userProducts, getUserProducts, password };
+  const getUserInfo = async () => {
+    try {
+      const response = await axios({
+        method: "get",
+        url: `${import.meta.env.VITE_BASE_URL}/accounts/detail/`,
+        headers: {
+          Authorization: `Token ${token.value}`,
+        },
+      });
+
+      console.log(response.data);
+      gender.value = response.data.gender;
+      income.value = response.data.income;
+      assets.value = response.data.assets;
+
+      sessionStorage.setItem("userGender", JSON.stringify(gender.value));
+      sessionStorage.setItem("userIncome", JSON.stringify(income.value));
+      sessionStorage.setItem("userAssets", JSON.stringify(assets.value));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return { isLoggedIn, token, login, logout, signup, username, userEmail, isStaff, userProducts, getUserProducts, password, getUserInfo, gender, income, assets };
 });
