@@ -9,8 +9,8 @@ urlpatterns = [
     path('installment_savings/<str:fin_prdt_cd>/', views.installment_savings_detail),
     path('deposit/search', views.deposit_search),
     path('installment_savings/search', views.installment_savings_search),
-    path('deposit/<str:fin_prdt_cd>/<str:save_trm>/', views.deposit_intr_rate_update),
-    path('installment_savings/<str:fin_prdt_cd>/<str:save_trm>/<int:installment_savings_option_id>/', views.installment_savings_intr_rate_update),
+    path('deposit/<str:fin_prdt_cd>/<int:deposit_option_id>/', views.deposit_intr_rate_update),
+    path('installment_savings/<str:fin_prdt_cd>/<int:installment_savings_option_id>/', views.installment_savings_intr_rate_update),
     path('create_dummy_data/', views.create_dummy_data),
     path('recommend_list/', views.recommend_list),
 ]

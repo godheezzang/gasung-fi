@@ -228,21 +228,20 @@ def installment_savings_search(request) :
 
 @api_view(['PUT',])
 @permission_classes([IsAdminUser])
-def deposit_intr_rate_update(request, fin_prdt_cd, save_trm) :
-    deposit_option = get_object_or_404(DepositOptions, fin_prdt_cd=fin_prdt_cd, save_trm=save_trm)
+def deposit_intr_rate_update(request, fin_prdt_cd, depotis_option_id) :
+    deposit_option = get_object_or_404(DepositOptions, fin_prdt_cd=fin_prdt_cd, pk=depotis_option_id)
     serializer = DepositOptionsUpdateSerializer(deposit_option, data=request.data, partial=True)
     if serializer.is_valid(raise_exception=True):
         serializer.save()
-        send_email(fin_prdt_cd, True)
+        # send_email(fin_prdt_cd, True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 @api_view(['PUT',])
 @permission_classes([IsAdminUser])
-def installment_savings_intr_rate_update(request, fin_prdt_cd, save_trm, installment_savings_option_id) :
+def installment_savings_intr_rate_update(request, fin_prdt_cd, installment_savings_option_id) :
     installment_savings_option = get_object_or_404(InstallmentSavingsOptions,
                                                    fin_prdt_cd=fin_prdt_cd,
-                                                   save_trm=save_trm,
                                                    pk=installment_savings_option_id)
     serializer = InstallmentSavingsOptionsUpdateSerializer(installment_savings_option, data=request.data, partial=True)
     if serializer.is_valid(raise_exception=True):
