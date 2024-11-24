@@ -16,7 +16,7 @@ export const useUserStore = defineStore("user", () => {
     const storedEmail = JSON.parse(sessionStorage.getItem("userEmail"));
     const storedUsername = JSON.parse(sessionStorage.getItem("username"));
 
-    console.log(storedEmail);
+    // console.log(storedEmail);
     if (storedIsLoggedIn && storedToken) {
       isLoggedIn.value = true;
       token.value = storedToken;
@@ -43,12 +43,10 @@ export const useUserStore = defineStore("user", () => {
         },
       });
 
-      // console.log(response);
       if (response.status === 201) {
         const userData = data;
         userData.userToken = response.data.key;
 
-        // console.log(userData);
         login(userData);
       }
     } catch (error) {
@@ -67,8 +65,6 @@ export const useUserStore = defineStore("user", () => {
           password: data.password ? data.password : data.password1,
         },
       });
-
-      // console.log(response);
 
       userEmail.value = data.email;
       token.value = response.data.key;
