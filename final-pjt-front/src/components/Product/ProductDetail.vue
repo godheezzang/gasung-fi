@@ -46,9 +46,13 @@ console.log(store.userProducts);
 // };
 
 // 이미 가입한 상품 목록에서 해당 상품이 있는지 확인
+
 const checkAlreadyJoined = () => {
   alreadyJoined.value = store.userProducts.some((userProduct) => userProduct.fin_prdt_cd === finPrdtCd);
+  return alreadyJoined.value;
 };
+
+alreadyJoined.value = checkAlreadyJoined();
 
 const handleJoin = async () => {
   if (!store.isLoggedIn) {
@@ -80,7 +84,7 @@ const handleJoin = async () => {
 
       // console.log(response.data);
       // 상품 가입 후 사용자 상품 목록 요청
-      store.getUserProducts();
+      await store.getUserProducts();
       alreadyJoined.value = true;
       alert("상품 가입이 완료되었습니다.");
     } catch (error) {
@@ -88,7 +92,6 @@ const handleJoin = async () => {
       alert("상품 가입에 실패했어요!");
     }
   }
-  return;
 };
 
 // 가입 제한 설명 변환 로직
