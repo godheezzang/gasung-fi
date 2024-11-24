@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from dj_rest_auth.registration.views import LoginView
 from accounts.serializers import (UserDetailSerializer,
                                   UserUpdateSerializer)
+from products.serializers import UserProductsSerializer
 
 
 # Create your views here.
@@ -36,7 +37,9 @@ class CustomLoginView(LoginView) :
         user = self.serializer.validated_data['user']
         backend = 'diango.contrib.auth.backends.ModelBackend'
         user.backend = backend
+        user_products = UserProductsSerializer(user.user_products.all(), many=True).data
         response_data['username'] = user.username
         response_data['is_staff'] = user.is_staff
+        response_data['user_products'] = user_products
         return Response(response_data, status=status.HTTP_200_OK)
 

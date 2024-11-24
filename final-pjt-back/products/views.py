@@ -233,7 +233,7 @@ def deposit_intr_rate_update(request, fin_prdt_cd, depotis_option_id) :
     serializer = DepositOptionsUpdateSerializer(deposit_option, data=request.data, partial=True)
     if serializer.is_valid(raise_exception=True):
         serializer.save()
-        # send_email(fin_prdt_cd, True)
+        send_email(fin_prdt_cd, True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -246,7 +246,7 @@ def installment_savings_intr_rate_update(request, fin_prdt_cd, installment_savin
     serializer = InstallmentSavingsOptionsUpdateSerializer(installment_savings_option, data=request.data, partial=True)
     if serializer.is_valid(raise_exception=True):
         serializer.save()
-        # send_email(fin_prdt_cd, False)
+        send_email(fin_prdt_cd, False)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
