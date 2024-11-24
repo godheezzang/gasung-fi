@@ -29,6 +29,7 @@ class InstallmentSavingsOptionsSerializer(serializers.ModelSerializer):
         exclude = ("fin_prdt_cd",)
         read_only_fields = ("fin_prdt_cd",)
 class InstallmentSavingsOptionsUpdateSerializer(serializers.ModelSerializer):
+    installment_savings_option_id = serializers.IntegerField(source="id", read_only=True)
     class Meta:
         model = InstallmentSavingsOptions
         exclude = ("fin_prdt_cd",)
