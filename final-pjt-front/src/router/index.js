@@ -4,12 +4,15 @@ import ArticleDetail from "@/components/Community/ArticleDetail.vue";
 import ExchangeCalculate from "@/components/ExchangeRate/ExchangeCalculate.vue";
 import ExchangeRateList from "@/components/ExchangeRate/ExchangeRateList.vue";
 import ProductDetail from "@/components/Product/ProductDetail.vue";
-import RecommendProduct from "@/components/Profile/RecommendProduct.vue";
+import ChangePassword from "@/components/Profile/ChangePassword.vue";
+import MyProductList from "@/components/Profile/MyProductList.vue";
+import MyProfile from "@/components/Profile/MyProfile.vue";
+import PasswordVerification from "@/components/Profile/PasswordVerification.vue";
 import { useUserStore } from "@/stores/user";
-import ExchangeRateView from "@/views/ExchangeRateView.vue";
 import LoginView from "@/views/LoginView.vue";
 import MainView from "@/views/MainView.vue";
 import ProfileView from "@/views/ProfileView.vue";
+import RecomendView from "@/views/RecomendView.vue";
 import SignupView from "@/views/SignupView.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
@@ -37,16 +40,31 @@ const router = createRouter({
       component: ProfileView,
       children: [
         {
-          path: "/profile/my_products",
-          name: "my_products",
-          component: () => import("@/views/MyProductView.vue"),
+          path: "profile/my_info",
+          name: "my_profile",
+          component: MyProfile,
         },
         {
-          path: "/profile/recommend",
-          name: "recommend_products",
-          component: () => import("@/components/Profile/RecommendProduct.vue"),
+          path: "/profile/my_products",
+          name: "my_products",
+          component: MyProductList,
+        },
+        {
+          path: "/profile/password-verification",
+          name: "password_verification",
+          component: PasswordVerification,
+        },
+        {
+          path: "/profile/change_password",
+          name: "change_password",
+          component: ChangePassword,
         },
       ],
+    },
+    {
+      path: "/recommend",
+      name: "recommend",
+      component: RecomendView,
     },
     {
       path: "/exchange-rate",

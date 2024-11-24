@@ -11,6 +11,7 @@ export const useUserStore = defineStore("user", () => {
   const router = useRouter();
   const isStaff = ref(false);
   const userProducts = ref([]);
+  const password = ref(null);
 
   onMounted(() => {
     const storedIsLoggedIn = JSON.parse(sessionStorage.getItem("isLoggedIn"));
@@ -83,6 +84,7 @@ export const useUserStore = defineStore("user", () => {
       isLoggedIn.value = true;
       isStaff.value = response.data.is_staff;
       userProducts.value = response.data.user_products;
+      password.value = data.password ? data.password : data.password1;
 
       sessionStorage.setItem("userToken", JSON.stringify(token.value));
       sessionStorage.setItem("isLoggedIn", JSON.stringify(isLoggedIn.value));
@@ -132,5 +134,5 @@ export const useUserStore = defineStore("user", () => {
     }
   };
 
-  return { isLoggedIn, token, login, logout, signup, username, userEmail, isStaff, userProducts, getUserProducts };
+  return { isLoggedIn, token, login, logout, signup, username, userEmail, isStaff, userProducts, getUserProducts, password };
 });
