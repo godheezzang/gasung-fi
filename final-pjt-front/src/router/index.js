@@ -4,6 +4,7 @@ import ArticleDetail from "@/components/Community/ArticleDetail.vue";
 import ExchangeCalculate from "@/components/ExchangeRate/ExchangeCalculate.vue";
 import ExchangeRateList from "@/components/ExchangeRate/ExchangeRateList.vue";
 import ProductDetail from "@/components/Product/ProductDetail.vue";
+import Recommend from "@/components/Product/RecommendList.vue";
 import ChangePassword from "@/components/Profile/ChangePassword.vue";
 import MyProductList from "@/components/Profile/MyProductList.vue";
 import MyProfile from "@/components/Profile/MyProfile.vue";
@@ -12,7 +13,6 @@ import { useUserStore } from "@/stores/user";
 import LoginView from "@/views/LoginView.vue";
 import MainView from "@/views/MainView.vue";
 import ProfileView from "@/views/ProfileView.vue";
-import RecomendView from "@/views/RecomendView.vue";
 import SignupView from "@/views/SignupView.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
@@ -38,6 +38,7 @@ const router = createRouter({
       path: "/profile",
       name: "profile",
       component: ProfileView,
+      meta: { requiresAuth: true },
       children: [
         {
           path: "profile/my_info",
@@ -60,11 +61,6 @@ const router = createRouter({
           component: ChangePassword,
         },
       ],
-    },
-    {
-      path: "/recommend",
-      name: "recommend",
-      component: RecomendView,
     },
     {
       path: "/exchange-rate",
@@ -122,6 +118,12 @@ const router = createRouter({
           path: "/products/:product_id",
           name: "product_detail",
           component: ProductDetail,
+        },
+        {
+          path: "/products/recommend",
+          name: "product_recommend",
+          component: Recommend,
+          meta: { requiresAuth: true }, // 인증 필요 페이지
         },
       ],
     },
