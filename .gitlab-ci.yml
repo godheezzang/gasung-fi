@@ -49,6 +49,8 @@ build-django:       # This job runs in the build stage, which runs first.
 deploy:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
   image: ruby:2.7
+  tags:
+    - gasung-fi
   script:
     - apt-get update -y
     - apt-get install -y openssh-client
