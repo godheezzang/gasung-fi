@@ -6,6 +6,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import get_user_model
 import random
@@ -34,6 +35,11 @@ User = get_user_model()
 
 def get_value_with_default(data, key, default) :
     return data.get(key, default) if data.get(key) is not None else default
+
+class DepositAndSavingsPagination(PageNumberPagination):
+    page_size = 12
+    page_size_query_param = 'page_size'
+    max_page_size = 100
 
 @api_view(['GET',])
 def get_deposit_product(request):
@@ -146,8 +152,10 @@ def get_installment_savings_products(request):
 def deposit_list(request) :
     if request.method == 'GET':
         deposits = get_list_or_404(Deposit)
-        serializer = DepositListSerializer(deposits, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        paginator = DepositAndSavingsPagination()
+        paginated_deposits = paginator.paginate_queryset(deposits, request)
+        serializer = DepositListSerializer(paginated_deposits, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
 @api_view(['GET','POST'])
 def deposit_detail(request, fin_prdt_cd) :
@@ -171,8 +179,10 @@ def deposit_detail(request, fin_prdt_cd) :
 def installment_savings_list(request) :
     if request.method == 'GET':
         installment_savings = get_list_or_404(InstallmentSavings)
-        serializer = InstallmentSavingsListSerializer(installment_savings, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        paginator = DepositAndSavingsPagination()
+        paginated_installment_savings = paginator.paginate_queryset(installment_savings, request)
+        serializer = InstallmentSavingsListSerializer(paginated_installment_savings, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
 @api_view(['GET', 'POST'])
 def installment_savings_detail(request, fin_prdt_cd) :
@@ -233,7 +243,7 @@ def deposit_intr_rate_update(request, fin_prdt_cd, deposit_option_id) :
     serializer = DepositOptionsUpdateSerializer(deposit_option, data=request.data, partial=True)
     if serializer.is_valid(raise_exception=True):
         serializer.save()
-        # send_email(fin_prdt_cd, True)
+        send_email(fin_prdt_cd, True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -245,7 +255,7 @@ def installment_savings_intr_rate_update(request, fin_prdt_cd, installment_savin
                                                    pk=installment_savings_option_id)
     serializer = InstallmentSavingsOptionsUpdateSerializer(installment_savings_option, data=request.data, partial=True)
     if serializer.is_valid(raise_exception=True):
-        # serializer.save()
+        serializer.save()
         send_email(fin_prdt_cd, False)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
