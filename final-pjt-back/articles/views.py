@@ -1,7 +1,9 @@
 from django.shortcuts import render, get_object_or_404
+from faker import Faker
 from rest_framework import status
+from django.contrib.auth import get_user_model
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from .models import Article, Comment
@@ -9,6 +11,8 @@ from .serializers import (ArticleCreateSerializer,
                           CommentSerializer,
                           ArticleListSerializer)
 # Create your views here.
+fake = Faker()
+User = get_user_model()
 class ArticlesPagination(PageNumberPagination):
     page_size = 10
     page_size_query_param = 'page_size'
@@ -85,6 +89,39 @@ def comment_detail(request, article_id, comment_id):
         if serializer.is_valid(raise_exception=True):
             serializer.save(user=request.user, article=article, main_comment=comment)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+@api_view(['POST',])
+@permission_classes([IsAdminUser])
+def create_dummy_article(request) :
+    nums_article = int(request.data.get('nums_article', 10))
+    num_comments_per_article = int(request.data.get('num_comments_per_article', 5))
+    articles_to_create = []
+    for _ in range(nums_article) :
+        user = User.objects.order_by('?').first()
+
+        article = Article(
+            user=user,
+            title=fake.sentence(nb_words=6),
+            content=fake.text(),
+        )
+        article.save()
+        articles_to_create.append(article)
+    for article in articles_to_create:
+        for _ in range(num_comments_per_article) :
+            user = User.objects.order_by('?').first()
+            comment = Comment(
+                user=user,
+                article=article,
+                main_comment=None,
+                content=fake.text(),
+            )
+            comment.save()
+
+    message = {
+        "status" : "success",
+        "message" : f"{nums_article}개의 게시글이 생성되었습니다."
+    }
+    return Response(message, status=status.HTTP_201_CREATED)
 
 
 
