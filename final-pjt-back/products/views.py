@@ -233,7 +233,7 @@ def deposit_intr_rate_update(request, fin_prdt_cd, deposit_option_id) :
     serializer = DepositOptionsUpdateSerializer(deposit_option, data=request.data, partial=True)
     if serializer.is_valid(raise_exception=True):
         serializer.save()
-        send_email(fin_prdt_cd, True)
+        # send_email(fin_prdt_cd, True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -245,7 +245,7 @@ def installment_savings_intr_rate_update(request, fin_prdt_cd, installment_savin
                                                    pk=installment_savings_option_id)
     serializer = InstallmentSavingsOptionsUpdateSerializer(installment_savings_option, data=request.data, partial=True)
     if serializer.is_valid(raise_exception=True):
-        serializer.save()
+        # serializer.save()
         send_email(fin_prdt_cd, False)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -356,6 +356,8 @@ def recommend_list(request) :
     age = user.age
     assets = user.assets
     income = user.income
+    if age is None or income is None or assets is None:
+        return Response({'error': '나이, 연봉, 자산을 입력해 주세요.'}, status=status.HTTP_204_NO_CONTENT)
     all_users = User.objects.all().values('id', 'income', 'age', 'assets')
     df_users = pd.DataFrame(all_users)
     similar_users = df_users[
@@ -367,8 +369,11 @@ def recommend_list(request) :
     similar_users_ids = similar_users['id'].tolist()
     user_products = UserProducts.objects.filter(user_id__in=similar_users_ids)
     recommended_products = (UserProducts.objects.filter(user_id__in=similar_users_ids).exclude(fin_prdt_cd__in=user_products))
-    df_products = pd.DataFrame(list(recommended_products.values('fin_prdt_cd','fin_prdt_nm', 'product_type', 'kor_co_nm')))
-    product_counts = df_products.groupby(['fin_prdt_cd','fin_prdt_nm', 'product_type', 'kor_co_nm']).size().reset_index(name='count')
+    try :
+        df_products = pd.DataFrame(list(recommended_products.values('fin_prdt_cd','fin_prdt_nm', 'product_type', 'kor_co_nm')))
+        product_counts = df_products.groupby(['fin_prdt_cd','fin_prdt_nm', 'product_type', 'kor_co_nm']).size().reset_index(name='count')
+    except KeyError as e:
+        return Response({'error': "추천 상품이 없습니다"}, status=status.HTTP_204_NO_CONTENT)
     top_products = product_counts.sort_values(by='count', ascending=False).head(10)
     result = [
         {
