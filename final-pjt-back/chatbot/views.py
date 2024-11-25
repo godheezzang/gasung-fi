@@ -8,7 +8,7 @@ from openai import OpenAI
 # Create your views here.
 
 openai_api_key = my_settings.OPENAI_API_KEY
-
+conversation_history = []
 @api_view(['POST'])
 # @permission_classes([IsAuthenticated])
 def chat(request) :
@@ -22,6 +22,7 @@ def chat(request) :
         return Response({'response': '금융 및 경제 관련 질문을 해주세요.'}, status=status.HTTP_200_OK)
 
     try :
+        conversation_history.append({"role" : "user", "content" : user_message})
         response = client.chat.completions.create(
             model = "gpt-4o-mini",
             messages = [
@@ -35,10 +36,12 @@ def chat(request) :
                  provide examples and support your answers with statistics or evidence ,  
                  Shortly"""},
                 {"role": "user", "content" : user_message}
-            ],
+            ] + conversation_history,
         )
         bot_response = response.choices[0].message.content
-        return Response({'response': bot_response}, status=status.HTTP_200_OK)
+        conversation_history.append({"role" : "assistant", "content" : bot_response})
+        return Response({'conversation_history' : conversation_history,
+                         'response': bot_response}, status=status.HTTP_200_OK)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
