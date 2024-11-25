@@ -65,6 +65,7 @@ const updateDeposits = (newDeposits) => {
 const nextPage = () => {
   if (currentPage.value < totalPages.value) {
     currentPage.value++;
+
     fetchDeposits(currentPage.value);
   }
 };

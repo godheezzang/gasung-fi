@@ -15,7 +15,7 @@ class ArticleCommentsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ("id",'username', 'content', "comment_id",'email', 'replies', )
+        fields = ("id",'username', 'content', 'email', 'replies', )
 
     def get_replies(self, obj):
         replies = Comment.objects.filter(main_comment=obj)

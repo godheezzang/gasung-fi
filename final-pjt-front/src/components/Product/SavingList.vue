@@ -6,7 +6,7 @@
       <div class="product-list">
         <!-- {{ savings }} -->
         <div class="product-box">
-          <ProductListItem v-for="saving in savings" :key="saving.installment_savings_id" :item="saving" />
+          <ProductListItem v-for="saving in savings" :key="saving.id" :item="saving" />
         </div>
         <div v-if="savings.length === 0" class="product-box">
           <p>상품 정보가 없습니다.</p>

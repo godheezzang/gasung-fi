@@ -13,19 +13,14 @@
       <p>만기 후 이자율: {{ product.mtrt_int }}</p>
       <p>우대 조건: {{ product.spcl_cnd }}</p>
       <div class="product-options">
-        <li v-for="option in product.options" :key="option.deposit_option_id ? option.deposit_option_id : option.installment_savings_option_id">
+        <li v-for="option in product.options" :key="option.id">
           <!-- {{ option }} -->
           <p>저축 금리 유형: {{ option.intr_rate_type }}</p>
           <p>저축 금리 유형명: {{ option.intr_rate_type_nm }}</p>
           <p>저축 기간: {{ option.save_trm }}</p>
           <p>저축 금리: {{ option.intr_rate }}</p>
           <p>최고 우대금리: {{ option.intr_rate2 }}</p>
-          <Button
-            v-if="store.isStaff"
-            content="금리 수정"
-            :onClick="() => moveToUpdateRate(option.deposit_option_id ? option.deposit_option_id : option.installment_savings_option_id)"
-            ariaLabel="금리 수정"
-          />
+          <Button v-if="store.isStaff" content="금리 수정" :onClick="() => moveToUpdateRate(option.id)" ariaLabel="금리 수정" />
           <hr />
         </li>
       </div>

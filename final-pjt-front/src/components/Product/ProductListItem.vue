@@ -6,10 +6,10 @@
       query: { product_type: productType },
     }"
   >
+    {{ item }}
     <div class="product-card">
-      <p>공시 제출월: {{ item.dcls_month }}</p>
-      <p>금융 회사명: {{ item.kor_co_nm }}</p>
-      <p>상품명: {{ item.fin_prdt_nm }}</p>
+      <p>{{ item.kor_co_nm }}</p>
+      <p>{{ item.fin_prdt_nm }}</p>
     </div>
   </RouterLink>
 </template>
@@ -27,9 +27,9 @@ watch(
   () => props.item,
   (newItem) => {
     if (newItem) {
-      if (newItem.installment_savings_id) {
+      if (newItem.id) {
         productType.value = "saving";
-      } else if (newItem.deposit_id) {
+      } else if (newItem.id) {
         productType.value = "deposit";
       } else {
         productType.value = null;
