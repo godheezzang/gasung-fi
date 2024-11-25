@@ -10,7 +10,7 @@ from openai import OpenAI
 openai_api_key = my_settings.OPENAI_API_KEY
 conversation_history = []
 @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def chat(request) :
     user_message = request.data.get('message', '')
     client = OpenAI(api_key=openai_api_key)
