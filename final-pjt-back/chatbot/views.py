@@ -49,6 +49,6 @@ def is_financial_question(message):
     financial_keywords = ['주식', '경제', '금리', '투자', '재무', '채권', '환율', '자산', '부동산', '인플레이션', '물가',
                           '디플레이션', '세금', '신용', '보험', '기업', '암호화폐', '리스크', 'GDP', 'CPI', 'PPI', '실업률',
                           '거래', '국채', '회사채', '지표', '정책', '대출', '외환', '펀드', 'ETF', '옵션', '선물',
-                          '증권', '비트코인']
+                          '증권', '비트코인', '금융']
 
     return any(keyword in message for keyword in financial_keywords)
