@@ -19,9 +19,7 @@ def chat(request) :
         return Response({'error': '메세지를 입력해 주세요.'}, status=status.HTTP_400_BAD_REQUEST)
 
     if not is_financial_question(user_message):
-        return Response({'response': """
-        안녕하세요! 저는 금융과 경제와 관련된 질문을 도와드리기 위해 여기 있어요. 혹시 그와 관련된 궁금한 점이나 도움이 필요하신 부분이 있다면 정말 기쁘게 답변해드릴게요. :blush:
-만약 다른 주제에 대해 질문하고 싶으신 거라면, 그 부분은 제가 잘 알지 못할 수도 있어서요. 금융이나 경제에 관한 이야기라면 더욱 성심껏 도와드릴 수 있으니, 편하게 질문해 주세요! 언제든 열심히 도와드리겠습니다. 감사합니다!"""}, status=status.HTTP_200_OK)
+        return Response({'response': """안녕하세요! 저는 금융과 경제와 관련된 질문을 도와드리기 위해 여기 있어요.\n 혹시 그와 관련된 궁금한 점이나 도움이 필요하신 부분이 있다면 정말 기쁘게 답변해드릴게요.\n 😊\n만약 다른 주제에 대해 질문하고 싶으신 거라면, 그 부분은 제가 잘 알지 못할 수도 있어서요.\n 금융이나 경제에 관한 이야기라면 더욱 성심껏 도와드릴 수 있으니, 편하게 질문해 주세요!\n 언제든 열심히 도와드리겠습니다. 감사합니다!"""}, status=status.HTTP_200_OK)
 
     try :
         conversation_history.append({"role" : "user", "content" : user_message})
@@ -35,7 +33,8 @@ def chat(request) :
                  Use professional terminology whenever possible, 
                  but explain it in an easy-to-understand manner. 
                  If necessary, 
-                 provide examples and support your answers with statistics or evidence ,  
+                 provide examples and support your answers with statistics or evidence , 
+                 Please add a line break at the end of each sentence, using the tag \n., 
                  Shortly"""},
                 {"role": "user", "content" : user_message}
             ] + conversation_history,
