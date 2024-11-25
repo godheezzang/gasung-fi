@@ -10,9 +10,9 @@
     <button @click="handleUpdate" v-if="isCurrentUser">수정</button>
 
     <div v-if="comment.replies" class="reply-container">
-      <CommentListItem v-for="reply in comment.replies" :key="reply.comment_id" :comment="reply" :isComment="true" />
+      <CommentListItem v-for="reply in comment.replies" :key="reply.id" :comment="reply" :isComment="true" />
     </div>
-    <CommentCreate v-if="isReply" :isReply="true" :parentId="comment.comment_id" @close="isReply = false" class="reply-container" />
+    <CommentCreate v-if="isReply" :isReply="true" :parentId="comment.id" @close="isReply = false" class="reply-container" />
   </div>
 </template>
 
@@ -61,7 +61,7 @@ const toggleReply = () => {
 
 const handleDelete = async () => {
   try {
-    const response = await axios.delete(`${import.meta.env.VITE_BASE_URL}/articles/${articleId}/comments/${props.comment.comment_id}`, {
+    const response = await axios.delete(`${import.meta.env.VITE_BASE_URL}/articles/${articleId}/comments/${props.comment.id}`, {
       headers: {
         Authorization: `Token ${store.token}`,
       },

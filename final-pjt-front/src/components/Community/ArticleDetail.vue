@@ -1,30 +1,36 @@
 <template>
-  <div>
-    <h2>게시글 상세</h2>
-    <div>
-      <p>글 번호: {{ article.article_id }}</p>
-      <p>제목: {{ article.title }}</p>
-      <p>작성자: {{ article.username }}</p>
+  <div class="article-wrap">
+    <div class="article-container">
+      <div class="article-detail">
+        <div class="article-header">
+          <p class="article-title">{{ article.title }}</p>
+        </div>
+        <div class="article-desc">
+          <p class="article-user">작성자: {{ article.username }}</p>
+          <p class="article-time">작성일: {{ formattedCreatedAt }}</p>
+        </div>
+        <div class="article-body">
+          <p>{{ article.content }}</p>
+        </div>
+      </div>
       <hr />
-      <p>작성일: {{ formattedCreatedAt }}</p>
-      <p>수정일: {{ formattedUpdatedAt }}</p>
-      <hr />
-      <p>내용</p>
-      <p>{{ article.content }}</p>
+      <div class="comment-wrap">
+        <p>
+          <span>{{ article.comment_count }}개의 댓글</span>
+        </p>
+        <div class="comment-container">
+          <CommentListItem v-if="article.comment_count" v-for="comment in article.comments" :key="comment.id" :comment="comment" />
+          <div v-if="!article.comment_count">댓글이 없습니다.</div>
+        </div>
+      </div>
+      <CommentCreate />
+      <!-- TODO: 사용자 동일 여부에 따라 삭제, 수정버튼 렌더링 -->
+      <div class="article-btn-container">
+        <Button content="목록" :onClick="moveToList" ariaLabel="게시글 목록" />
+        <Button v-if="article.email === store.userEmail" content="삭제" :onClick="handleDelete" ariaLabel="게시글 삭제" />
+        <Button v-if="article.email === store.userEmail" content="수정" :onClick="moveToUpdate" ariaLabel="게시글 수정" />
+      </div>
     </div>
-    <hr />
-    <div>
-      <p>
-        <span>{{ article.comment_count }}개의 댓글</span>
-      </p>
-      <CommentListItem v-if="article.comment_count" v-for="comment in article.comments" :key="comment.comment_id" :comment="comment" />
-      <div v-if="!article.comment_count">댓글이 없습니다.</div>
-    </div>
-    <CommentCreate />
-    <!-- TODO: 사용자 동일 여부에 따라 삭제, 수정버튼 렌더링 -->
-    <Button content="목록" :onClick="moveToList" ariaLabel="게시글 목록" />
-    <Button v-if="article.email === store.userEmail" content="삭제" :onClick="handleDelete" ariaLabel="게시글 삭제" />
-    <Button v-if="article.email === store.userEmail" content="수정" :onClick="moveToUpdate" ariaLabel="게시글 수정" />
   </div>
 </template>
 
@@ -51,7 +57,7 @@ const formatDate = (dateString) => {
   const hours = date.getHours();
   const minutes = String(date.getMinutes()).padStart(2, "0");
 
-  const formattedTime = (hours === 0 ? 24 : hours) + ":" + minutes;
+  const formattedTime = (hours === 0 ? 24 : hours) + "시 " + minutes + "분";
 
   return `${year}년  ${month}월 ${day}일 ${formattedTime}`;
 };
@@ -104,4 +110,69 @@ onMounted(() => {
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.article-wrap {
+  margin-top: 2rem;
+  box-shadow: inset 0 0 20px blue;
+}
+
+.article-container {
+  /* box-shadow: inset 0 0 20px red; */
+  width: 70%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 80vh;
+  border: 1px solid var(--color-gray-02);
+  border-top: unset;
+  border-bottom: unset;
+  gap: 1rem;
+}
+
+.article-detail {
+  box-shadow: inset 0 0 20px yellow;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 2rem;
+  gap: 1rem;
+}
+
+.article-header {
+  /* box-shadow: inset 0 0 20px skyblue; */
+  flex-grow: 0.2;
+  display: flex;
+  align-items: center;
+}
+
+.article-title {
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-large);
+}
+
+.article-desc {
+  /* box-shadow: inset 0 0 20px hotpink; */
+  flex-grow: 0;
+}
+
+.article-body {
+  /* box-shadow: inset 0 0 20px gray; */
+  flex-grow: 2;
+}
+
+.comment-wrap {
+  box-shadow: inset 0 0 20px lime;
+}
+
+.comment-container {
+  box-shadow: inset 0 0 20px paleturquoise;
+}
+
+.article-btn-container {
+  box-shadow: inset 0 0 20px orange;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+</style>

@@ -4,20 +4,11 @@
     <form @submit.prevent="isEdit ? handleUpdate() : handleCreate()">
       <div>
         <label for="title">제목: </label>
-        <input
-          type="text"
-          id="title"
-          placeholder="제목을 작성해 주세요."
-          v-model="titleInput"
-        />
+        <input type="text" id="title" placeholder="제목을 작성해 주세요." v-model="titleInput" />
       </div>
       <div>
         <label for="content">내용</label>
-        <textarea
-          id="content"
-          placeholder="내용을 작성해 주세요."
-          v-model="contentInput"
-        ></textarea>
+        <Textarea placeholder="내용을 작성해 주세요." id="content" v-model="contentInput" />
       </div>
       <Button content="게시" ariaLabel="글 게시" type="submit" />
     </form>
@@ -26,6 +17,7 @@
 
 <script setup>
 import Button from "@/components/Common/Button.vue";
+import Textarea from "@/components/Common/Textarea.vue";
 import { useUserStore } from "@/stores/user";
 import axios from "axios";
 import { onMounted, ref } from "vue";
@@ -45,12 +37,9 @@ onMounted(async () => {
   if (articleId) {
     isEdit.value = true;
     try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/articles/${articleId}/`
-      );
+      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/articles/${articleId}/`);
 
-      (titleInput.value = response.data.title),
-        (contentInput.value = response.data.content);
+      (titleInput.value = response.data.title), (contentInput.value = response.data.content);
     } catch (error) {
       console.error(error);
     }
@@ -63,15 +52,11 @@ const handleCreate = async () => {
       title: titleInput.value,
       content: contentInput.value,
     };
-    const response = await axios.post(
-      `${import.meta.env.VITE_BASE_URL}/articles/`,
-      data,
-      {
-        headers: {
-          Authorization: `Token ${store.token}`,
-        },
-      }
-    );
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/articles/`, data, {
+      headers: {
+        Authorization: `Token ${store.token}`,
+      },
+    });
 
     if (response.status === 201) {
       router.push({ name: "community" });
@@ -87,15 +72,11 @@ const handleUpdate = async () => {
       title: titleInput.value,
       content: contentInput.value,
     };
-    const response = await axios.put(
-      `${import.meta.env.VITE_BASE_URL}/articles/${articleId}/`,
-      data,
-      {
-        headers: {
-          Authorization: `Token ${store.token}`,
-        },
-      }
-    );
+    const response = await axios.put(`${import.meta.env.VITE_BASE_URL}/articles/${articleId}/`, data, {
+      headers: {
+        Authorization: `Token ${store.token}`,
+      },
+    });
 
     if (response.status === 200) {
       router.push({ name: "community" });
