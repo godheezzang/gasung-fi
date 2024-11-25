@@ -27,18 +27,18 @@ class UserLoginSerializer(LoginSerializer):
 
 class UserDetailSerializer(UserDetailsSerializer) :
     class UserProductsSerializer(serializers.ModelSerializer):
-        user_product_id = serializers.IntegerField(source="id", read_only=True)
+        # user_product_id = serializers.IntegerField(source="id", read_only=True)
         user = serializers.SerializerMethodField()
         class Meta:
             model = UserProducts
-            fields = ('user_product_id', 'fin_prdt_cd', 'fin_prdt_nm', 'product_type', 'kor_co_nm', 'created_at', 'user')
+            fields = ('id', 'fin_prdt_cd', 'fin_prdt_nm', 'product_type', 'kor_co_nm', 'created_at', 'user')
         def get_user(self, obj):
             return obj.user.username
     user_products = UserProductsSerializer(many=True, read_only=True)
-    user_id = serializers.IntegerField(source="id", read_only=True)
+    # user_id = serializers.IntegerField(source="id", read_only=True)
     class Meta(UserDetailsSerializer.Meta) :
         model = User
-        fields = ('user_id', 'email', 'username', 'user_products', 'age', 'assets', 'income', 'gender', 'date_joined', 'last_login', 'is_staff')
+        fields = ('id', 'email', 'username', 'user_products', 'age', 'assets', 'income', 'gender', 'date_joined', 'last_login', 'is_staff')
 
 class UserUpdateSerializer(UserDetailsSerializer) :
     class Meta(UserDetailsSerializer.Meta):

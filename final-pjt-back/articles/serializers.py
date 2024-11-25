@@ -2,20 +2,20 @@ from rest_framework import serializers
 from .models import Article, Comment
 
 class ArticleCreateSerializer(serializers.ModelSerializer):
-    article_id = serializers.IntegerField(source="id", read_only=True)
+    # article_id = serializers.IntegerField(source="id", read_only=True)
     class Meta:
         model = Article
-        fields = ("article_id",'title', 'content',)
+        fields = ("id",'title', 'content',)
         read_only_fields = ('user',)
 class ArticleCommentsSerializer(serializers.ModelSerializer):
-    comment_id = serializers.IntegerField(source="id", read_only=True)
+    # comment_id = serializers.IntegerField(source="id", read_only=True)
     username = serializers.SerializerMethodField()
     email = serializers.SerializerMethodField()
     replies = serializers.SerializerMethodField()
 
     class Meta:
         model = Comment
-        fields = ('username', 'content', "comment_id",'email', 'replies', )
+        fields = ("id",'username', 'content', "comment_id",'email', 'replies', )
 
     def get_replies(self, obj):
         replies = Comment.objects.filter(main_comment=obj)
@@ -29,14 +29,14 @@ class ArticleCommentsSerializer(serializers.ModelSerializer):
 
 
 class ArticleListSerializer(serializers.ModelSerializer):
-    article_id = serializers.IntegerField(source="id", read_only=True)
+    # article_id = serializers.IntegerField(source="id", read_only=True)
     comments = serializers.SerializerMethodField()
     username = serializers.SerializerMethodField()
     comment_count = serializers.SerializerMethodField()
     email = serializers.SerializerMethodField()
     class Meta:
         model = Article
-        exclude = ("id",)
+        fields = '__all__'
     def get_username(self, obj):
         return obj.user.username
 
@@ -52,8 +52,8 @@ class ArticleListSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    comment_id = serializers.IntegerField(source="id", read_only=True)
+    # comment_id = serializers.IntegerField(source="id", read_only=True)
     class Meta:
         model = Comment
-        fields = ("comment_id",'content',)
+        fields = ("id",'content',)
         read_only_fields = ('user', 'article', 'main_comment',)
