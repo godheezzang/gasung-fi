@@ -1,15 +1,16 @@
 <template>
   <div>
-    <div v-if="isLoading">Loading...</div>
-    <div v-else-if="rateInfos" class="rate-container">
-      <ExchangeRateListItem v-for="rate in rateInfos" :key="rate.cur_unit" :rate="rate" class="rate-card" />
+    <Loading :isLoading="isLoading" />
+
+    <div class="rate-container product-box">
+      <ExchangeRateListItem v-for="rate in rateInfos" :key="rate.cur_unit" :rate="rate" class="product-card" />
     </div>
     <!-- TODO: 환율 정보 불러올 수 없을 경우 에러 페이지 -->
-    <div v-else>환율 정보를 불러올 수 없습니다.</div>
   </div>
 </template>
 
 <script setup>
+import Loading from "@/components/Common/Loading.vue";
 import ExchangeRateListItem from "@/components/ExchangeRate/ExchangeRateListItem.vue";
 import { useRateStore } from "@/stores/exchangeRate";
 import { onMounted, ref, watch } from "vue";
@@ -31,18 +32,10 @@ onMounted(() => {
 
 <style scoped>
 .rate-container {
-  box-shadow: inset 0 0 20px blue;
+  /* box-shadow: inset 0 0 20px blue; */
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.rate-card {
-  /* box-shadow: inset 0 0 20px red; */
-  border: 1px solid var(--color-gray-04);
-  /* flex-grow: 1; */
-  flex-shrink: 0;
-  flex-basis: 100%;
-  max-width: 30%;
+  gap: 3rem;
+  padding: 3rem 2rem;
 }
 </style>

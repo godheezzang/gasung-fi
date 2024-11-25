@@ -1,7 +1,6 @@
 <template>
   <div>
-    <h1>내 상품 확인</h1>
-    <div v-if="userProducts.length > 0">
+    <div v-if="userProducts.length > 0" class="product-box">
       <MyProductListItem v-for="product in userProducts" :key="product.user_product_id" :product="product" />
       <!-- {{ userProducts }} -->
     </div>
@@ -28,4 +27,8 @@ const moveToProducts = () => {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.product-box {
+  margin: 3rem 0;
+}
+</style>

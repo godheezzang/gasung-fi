@@ -1,4 +1,5 @@
 <template>
+  <Loading :isLoading="isLoading" />
   <div class="select-container">
     <div class="select-box">
       <label for="bank-select">은행 선택</label>
@@ -28,6 +29,7 @@
 
 <script setup>
 import Button from "@/components/Common/Button.vue";
+import Loading from "@/components/Common/Loading.vue";
 import { useMapStore } from "@/stores/map";
 import axios from "axios";
 import { ref } from "vue";
@@ -46,8 +48,12 @@ const banks = mapStore.banks;
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const emit = defineEmits();
 console.log(props.apiUrl);
+const isLoading = ref(false);
 
 const searchProducts = async () => {
+  isLoading.value = true;
+  console.log(bankName);
+
   try {
     const response = await axios({
       method: "get",
@@ -59,10 +65,12 @@ const searchProducts = async () => {
     });
     // console.log(response);
 
-    // console.log(response.data);
+    console.log(response.data);
     emit("update:products", response.data);
+    isLoading.value = false;
   } catch (error) {
     console.error(error);
+    isLoading.value = false;
   }
 };
 </script>

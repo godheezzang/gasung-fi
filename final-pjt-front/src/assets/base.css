@@ -9,6 +9,12 @@
   --color-gray-04: #aaa;
   --color-error: #e37272;
 
+  --color-primary-blue: #6482ad;
+  --color-secondary-blue: #7fa1c3;
+  --color-primary-beige: #e2dad6;
+  --color-secondary-beige: #f5eded;
+  --color-spinner-blue: #6482ad3b;
+
   /* fonts */
   --font-size-extra-large: 3.2rem;
   --font-size-large: 2rem;

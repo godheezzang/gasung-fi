@@ -2,12 +2,11 @@
   <div class="modal" v-if="isVisible">
     <div class="modal-content">
       <span class="close" @click="closeModal">&times;</span>
-      <h1>금리 비교</h1>
-      {{ productDetail.fin_prdt_nm }}
-      <!-- {{ options }} -->
-
-      <!-- 추가적인 그래프 관련 내용 -->
-      <BarChart v-if="options.length" :chartData="chartData" :chartOptions="chartOptions" />
+      <p class="modal-title">{{ productDetail.fin_prdt_nm }}</p>
+      <!-- 그래프 관련 내용 -->
+      <div class="chart-container" v-if="options.length">
+        <BarChart :chartData="chartData" :chartOptions="chartOptions" />
+      </div>
     </div>
   </div>
 </template>
@@ -115,18 +114,46 @@ const chartOptions = ref({
 }
 
 .modal-content {
-  background-color: white;
-  padding: 20px;
+  background-color: var(--color-white);
+  padding: 2rem;
   border-radius: 5px;
+  box-sizing: border-box;
+  width: 50rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.modal-title {
+  font-size: var(--font-size-mlarge);
+  font-weight: var(--font-weight-medium);
+  text-align: center;
+  margin-bottom: 2rem;
 }
 
 .close {
   cursor: pointer;
-  float: right;
+  position: absolute; /* 절대 위치 설정 */
+  top: 1.5rem; /* 상단 여백 */
+  right: 2rem; /* 오른쪽 여백 */
+  font-size: var(--font-size-large); /* 크기 조정 */
+  display: inline-block;
+  width: 3rem;
+  height: 3rem;
+  text-align: center;
+}
+
+.close:hover {
+  background-color: var(--color-gray-01);
+  border-radius: 10px;
 }
 
 .chart-container {
-  width: 100%;
-  height: 400px;
+  display: flex;
+  justify-content: center; /* 수평 가운데 정렬 */
+  align-items: center; /* 수직 가운데 정렬 */
+  width: 100%; /* 전체 너비 사용 */
+  margin-top: 1rem; /* 차트와 제목 사이의 여백 */
 }
 </style>

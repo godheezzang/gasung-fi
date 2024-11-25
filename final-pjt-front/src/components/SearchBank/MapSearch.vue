@@ -111,10 +111,7 @@ const placesSearchCB = (data, status) => {
 };
 
 const onClickMapMarker = (markerItem) => {
-  if (
-    markerItem.infoWindow?.visible !== null &&
-    markerItem.infoWindow?.visible !== undefined
-  ) {
+  if (markerItem.infoWindow?.visible !== null && markerItem.infoWindow?.visible !== undefined) {
     markerItem.infoWindow.visible = !markerItem.infoWindow.visible;
   } else {
     markerItem.infoWindow.visible = true;
@@ -134,11 +131,7 @@ onMounted(() => {
 <template>
   <div class="map-wrap">
     <div class="map-container">
-      <KakaoMap
-        :lat="coordinate.lat"
-        :lng="coordinate.lng"
-        @onLoadKakaoMap="onLoadKakaoMap"
-      >
+      <KakaoMap :lat="coordinate.lat" :lng="coordinate.lng" @onLoadKakaoMap="onLoadKakaoMap">
         <KakaoMapMarker
           v-for="(marker, index) in markerList"
           :key="marker.key === undefined ? index : marker.key"
@@ -176,6 +169,6 @@ onMounted(() => {
   width: 100% !important;
   border-radius: 10px;
   border: 1px solid var(--color-gray-03);
-  height: 40rem !important;
+  height: 60rem !important;
 }
 </style>

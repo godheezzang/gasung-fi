@@ -1,5 +1,5 @@
 <template>
-  <div @click="openModal">
+  <div @click="openModal" class="product-card">
     <p>상품명: {{ product.fin_prdt_nm }}</p>
     <p>상품 타입: {{ product.product_type }}</p>
     <p>은행: {{ product.kor_co_nm }}</p>

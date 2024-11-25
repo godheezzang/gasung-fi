@@ -1,10 +1,7 @@
 <template>
+  <Loading :isLoading="isLoading" />
   <div>
-    <RecommendListItem
-      v-for="product in recommendProducts"
-      :key="product.fin_prdt_nm"
-      :product="product"
-    />
+    <RecommendListItem v-for="product in recommendProducts" :key="product.fin_prdt_nm" :product="product" />
     <div v-if="recommendProducts.length === 0">
       <p>추천 상품이 없습니다.</p>
     </div>
@@ -14,10 +11,7 @@
           <h3>정보 필요</h3>
         </template>
         <template #body>
-          <p>
-            성별, 나이, 연봉, 자산 정보가 필요해요! 정보 수정 페이지로
-            이동하시겠어요?
-          </p>
+          <p>성별, 나이, 연봉, 자산 정보가 필요해요! 정보 수정 페이지로 이동하시겠어요?</p>
         </template>
         <template #footer>
           <button @click="moveToProfile">네</button>
@@ -35,11 +29,13 @@ import { useRouter } from "vue-router";
 import axios from "axios";
 import RecommendListItem from "@/components/Product/RecommendListItem.vue";
 import Modal from "@/components/Common/Modal.vue";
+import Loading from "@/components/Common/Loading.vue";
 
 const userStore = useUserStore();
 const router = useRouter();
 const recommendProducts = ref([]);
 const showModal = ref(false);
+const isLoading = ref(true);
 
 const fetchRecommend = async () => {
   try {
@@ -53,6 +49,7 @@ const fetchRecommend = async () => {
     console.log(response);
     console.log(response.data);
     recommendProducts.value = response.data;
+    isLoading.value = false;
   } catch (error) {
     console.error(error);
     alert("에러가 발생하였습니다.");
