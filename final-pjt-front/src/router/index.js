@@ -127,27 +127,38 @@ const router = createRouter({
           meta: { requiresAuth: true }, // 인증 필요 페이지
         },
         {
-          path: "products/:product_id/:option_id/edit",
+          path: "/products/:product_id/:option_id/edit",
           name: "product_edit",
           component: ProductUpdate,
         },
       ],
     },
+    {
+      path: "/qna",
+      name: "qna",
+      component: () => import("@/views/QnAView.vue"),
+    },
   ],
 });
 
-router.beforeEach((to, from, next) => {
-  const userStore = useUserStore();
+// router.beforeEach((to, from, next) => {
+//   const userStore = useUserStore();
 
-  if (!userStore.isLoggedIn && to.meta.requiresAuth) {
-    return next({ name: "login" });
-  }
+//   if (!userStore.isLoggedIn && to.meta.requiresAuth) {
+//     const confirmed = window.confirm(
+//       "로그인이 필요한 페이지입니다. 로그인하시겠습니까?"
+//     );
+//     if (confirmed) {
+//       return next({ name: "login" });
+//     }
+//     return;
+//   }
 
-  if ((userStore.isLoggedIn && to.path === "/login") || to.path === "signup") {
-    return next({ path: "/" });
-  }
+//   if ((userStore.isLoggedIn && to.path === "/login") || to.path === "signup") {
+//     return next({ path: "/" });
+//   }
 
-  next();
-});
+//   next();
+// });
 
 export default router;
