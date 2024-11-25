@@ -1,13 +1,19 @@
 <template>
-  <div>
-    <h1>SavingList</h1>
-    <SearchProduct apiUrl="products/installment_savings/search" @update:products="updateSavings" />
-    <div class="product-container">
+  <div class="product-container">
+    <SearchProduct
+      apiUrl="products/installment_savings/search"
+      @update:products="updateSavings"
+    />
+    <div class="product-list">
       <!-- {{ savings }} -->
-      <ProductListItem v-for="saving in savings" :key="saving.installment_savings_id" :item="saving" />
-    </div>
-    <div v-if="savings.length === 0">
-      <p>상품 정보가 없습니다.</p>
+      <ProductListItem
+        v-for="saving in savings"
+        :key="saving.installment_savings_id"
+        :item="saving"
+      />
+      <div v-if="savings.length === 0">
+        <p>상품 정보가 없습니다.</p>
+      </div>
     </div>
   </div>
 </template>

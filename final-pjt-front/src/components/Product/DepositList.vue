@@ -1,13 +1,19 @@
 <template>
-  <div>
-    <h1>DepositList</h1>
-    <SearchProduct @update:products="updateDeposits" apiUrl="products/deposit/search" />
-    <div class="product-container">
+  <div class="product-container">
+    <SearchProduct
+      @update:products="updateDeposits"
+      apiUrl="products/deposit/search"
+    />
+    <div class="product-list">
       <!-- {{ deposits }} -->
-      <ProductListItem v-for="deposit in deposits" :key="deposit.deposit_id" :item="deposit" />
-    </div>
-    <div v-if="deposits.length === 0">
-      <p>상품 정보가 없습니다.</p>
+      <ProductListItem
+        v-for="deposit in deposits"
+        :key="deposit.deposit_id"
+        :item="deposit"
+      />
+      <div v-if="deposits.length === 0">
+        <p>상품 정보가 없습니다.</p>
+      </div>
     </div>
   </div>
 </template>
