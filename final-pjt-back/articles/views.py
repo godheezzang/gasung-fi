@@ -2,18 +2,25 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from .models import Article, Comment
 from .serializers import (ArticleCreateSerializer,
                           CommentSerializer,
                           ArticleListSerializer)
 # Create your views here.
+class ArticlesPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 100
 @api_view(['GET', 'POST',])
 def create_or_list_articles(request):
     if request.method == 'GET':
         articles = Article.objects.all().order_by('-created_at')
-        serializer = ArticleListSerializer(articles, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        paginator = ArticlesPagination()
+        paginated_articles = paginator.paginate_queryset(articles, request)
+        serializer = ArticleListSerializer(paginated_articles, many=True)
+        return paginator.get_paginated_response(serializer.data)
     elif request.method == 'POST':
         serializer = ArticleCreateSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
