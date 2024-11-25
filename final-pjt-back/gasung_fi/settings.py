@@ -147,6 +147,7 @@ SPECTACULAR_SETTINGS = {
 # Application definition
 
 INSTALLED_APPS = [
+    'chatbot',
     'accounts',
     'articles',
     'exchange_rate',
