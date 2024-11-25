@@ -69,7 +69,7 @@ const router = createRouter({
       component: () => import("@/views/ExchangeRateView.vue"),
       children: [
         {
-          path: "/exchange-rate",
+          path: "/exchange-rate/info",
           name: "exchange_rate_home",
           component: ExchangeRateList,
         },
@@ -137,6 +137,7 @@ const router = createRouter({
       path: "/qna",
       name: "qna",
       component: () => import("@/views/QnAView.vue"),
+      meta: { requiresAuth: true },
     },
   ],
 });
