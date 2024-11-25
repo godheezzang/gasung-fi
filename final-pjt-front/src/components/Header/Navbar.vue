@@ -1,9 +1,9 @@
 <template>
-  <div v-if="!isLoggedIn">
+  <div v-if="!isLoggedIn" class="nav-container">
     <RouterLink :to="{ name: 'login' }">로그인</RouterLink>
     <RouterLink :to="{ name: 'signup' }">회원가입</RouterLink>
   </div>
-  <div v-if="isLoggedIn">
+  <div v-if="isLoggedIn" class="nav-container">
     <RouterLink :to="{ name: 'profile' }">프로필</RouterLink>
     <RouterLink :to="{ name: 'my_products' }">내 상품</RouterLink>
     <Button
@@ -29,4 +29,12 @@ const handleLogout = () => {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.nav-container {
+  box-shadow: inset 0 0 20px red;
+  width: fit-content;
+  margin-left: auto;
+  display: flex;
+  gap: 1.8rem;
+}
+</style>

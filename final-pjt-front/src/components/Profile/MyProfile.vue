@@ -18,7 +18,7 @@
         <p>추가 정보</p>
         <div>
           <label for="gender">성별</label>
-          <select id="gender" v-model="gender">
+          <select class="custom-select" id="gender" v-model="gender">
             <option value="" disabled>선택하세요</option>
             <option value="M">남자</option>
             <option value="W">여자</option>
@@ -26,15 +26,34 @@
         </div>
         <div>
           <label for="age">나이</label>
-          <input type="number" id="age" v-model="age" placeholder="나이를 입력하세요." />
+          <input
+            type="number"
+            id="age"
+            v-model="age"
+            placeholder="나이를 입력하세요."
+          />
         </div>
         <div>
           <label for="income">연봉</label>
-          <input type="text" id="income" :value="formatNumber(income)" @input="updateIncome" placeholder="연봉을 입력하세요." /> (만)원
+          <input
+            type="text"
+            id="income"
+            :value="formatNumber(income)"
+            @input="updateIncome"
+            placeholder="연봉을 입력하세요."
+          />
+          (만)원
         </div>
         <div>
           <label for="assets">자산</label>
-          <input type="text" id="assets" :value="formatNumber(assets)" @input="updateAssets" placeholder="자산을 입력하세요." /> (만)원
+          <input
+            type="text"
+            id="assets"
+            :value="formatNumber(assets)"
+            @input="updateAssets"
+            placeholder="자산을 입력하세요."
+          />
+          (만)원
         </div>
       </div>
       <Button content="정보 수정" ariaLabel="정보 수정" type="submit" />
@@ -113,7 +132,6 @@ const handleUpdate = async () => {
       data: updatedData,
     });
 
-    console.log(response);
     alert("정보가 변경되었습니다.");
   } catch (error) {
     console.error(error);

@@ -6,6 +6,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import get_user_model
 import random
@@ -34,6 +35,11 @@ User = get_user_model()
 
 def get_value_with_default(data, key, default) :
     return data.get(key, default) if data.get(key) is not None else default
+
+class DepositAndSavingsPagination(PageNumberPagination):
+    page_size = 12
+    page_size_query_param = 'page_size'
+    max_page_size = 100
 
 @api_view(['GET',])
 def get_deposit_product(request):
@@ -146,8 +152,10 @@ def get_installment_savings_products(request):
 def deposit_list(request) :
     if request.method == 'GET':
         deposits = get_list_or_404(Deposit)
-        serializer = DepositListSerializer(deposits, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        paginator = DepositAndSavingsPagination()
+        paginated_deposits = paginator.paginate_queryset(deposits, request)
+        serializer = DepositListSerializer(paginated_deposits, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
 @api_view(['GET','POST'])
 def deposit_detail(request, fin_prdt_cd) :
@@ -171,8 +179,10 @@ def deposit_detail(request, fin_prdt_cd) :
 def installment_savings_list(request) :
     if request.method == 'GET':
         installment_savings = get_list_or_404(InstallmentSavings)
-        serializer = InstallmentSavingsListSerializer(installment_savings, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        paginator = DepositAndSavingsPagination()
+        paginated_installment_savings = paginator.paginate_queryset(installment_savings, request)
+        serializer = InstallmentSavingsListSerializer(paginated_installment_savings, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
 @api_view(['GET', 'POST'])
 def installment_savings_detail(request, fin_prdt_cd) :
@@ -356,6 +366,8 @@ def recommend_list(request) :
     age = user.age
     assets = user.assets
     income = user.income
+    if age is None or income is None or assets is None:
+        return Response({'error': '나이, 연봉, 자산을 입력해 주세요.'}, status=status.HTTP_204_NO_CONTENT)
     all_users = User.objects.all().values('id', 'income', 'age', 'assets')
     df_users = pd.DataFrame(all_users)
     similar_users = df_users[
@@ -367,8 +379,11 @@ def recommend_list(request) :
     similar_users_ids = similar_users['id'].tolist()
     user_products = UserProducts.objects.filter(user_id__in=similar_users_ids)
     recommended_products = (UserProducts.objects.filter(user_id__in=similar_users_ids).exclude(fin_prdt_cd__in=user_products))
-    df_products = pd.DataFrame(list(recommended_products.values('fin_prdt_cd','fin_prdt_nm', 'product_type', 'kor_co_nm')))
-    product_counts = df_products.groupby(['fin_prdt_cd','fin_prdt_nm', 'product_type', 'kor_co_nm']).size().reset_index(name='count')
+    try :
+        df_products = pd.DataFrame(list(recommended_products.values('fin_prdt_cd','fin_prdt_nm', 'product_type', 'kor_co_nm')))
+        product_counts = df_products.groupby(['fin_prdt_cd','fin_prdt_nm', 'product_type', 'kor_co_nm']).size().reset_index(name='count')
+    except KeyError as e:
+        return Response({'error': "추천 상품이 없습니다"}, status=status.HTTP_204_NO_CONTENT)
     top_products = product_counts.sort_values(by='count', ascending=False).head(10)
     result = [
         {

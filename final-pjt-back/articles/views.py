@@ -11,7 +11,7 @@ from .serializers import (ArticleCreateSerializer,
 @api_view(['GET', 'POST',])
 def create_or_list_articles(request):
     if request.method == 'GET':
-        articles = Article.objects.all()
+        articles = Article.objects.all().order_by('-created_at')
         serializer = ArticleListSerializer(articles, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     elif request.method == 'POST':

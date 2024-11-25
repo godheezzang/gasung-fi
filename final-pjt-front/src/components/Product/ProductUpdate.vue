@@ -35,7 +35,9 @@ const options = ref([]);
 const option = ref({});
 
 const getUrl = () => {
-  return productType === "saving" ? `${BASE_URL}/products/installment_savings/${finPrdtCd}/` : `${BASE_URL}/products/deposit/${finPrdtCd}/`;
+  return productType === "saving"
+    ? `${BASE_URL}/products/installment_savings/${finPrdtCd}/`
+    : `${BASE_URL}/products/deposit/${finPrdtCd}/`;
 };
 
 const getUpdateUrl = (productType) => {
@@ -67,10 +69,14 @@ const updateRate = async () => {
     // console.log(response);
     if (response.status === 200) {
       alert("수정이 완료되었습니다.");
-      router.push({ name: "product_detail", params: { product_id: finPrdtCd } });
+      router.push({
+        name: "product_detail",
+        params: { product_id: finPrdtCd },
+      });
     }
   } catch (error) {
     console.error(error);
+    alert("요청에 실패하였습니다.");
   }
 };
 
@@ -86,7 +92,11 @@ const fetchData = async () => {
     options.value = response.data.options;
     // console.log(options.value);
 
-    option.value = options.value.find((option) => (option.deposit_option_id ? option.deposit_option_id : option.installment_savings_option_id));
+    option.value = options.value.find((option) =>
+      option.deposit_option_id
+        ? option.deposit_option_id
+        : option.installment_savings_option_id
+    );
     // console.log(option.value);
     intrRate.value = option.value.intr_rate;
     intrRate2.value = option.value.intr_rate2;

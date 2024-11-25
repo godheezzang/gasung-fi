@@ -1,8 +1,11 @@
 <template>
   <div>
-    <h2>게시글 목록</h2>
     <div v-if="articles.length > 0">
-      <ArticleListItem v-for="article in articles" :key="article.article_id" :article="article" />
+      <ArticleListItem
+        v-for="article in articles"
+        :key="article.article_id"
+        :article="article"
+      />
     </div>
     <div v-else>게시글이 없습니다.</div>
   </div>
@@ -25,9 +28,10 @@ const moveToCreate = () => {
 
 const getArticles = async () => {
   try {
-    const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/articles/`);
-    // console.log(response);
-    const contentType = response.headers["content-type"];
+    const response = await axios.get(
+      `${import.meta.env.VITE_BASE_URL}/articles/`
+    );
+    console.log(response);
     if (response.status === 200 && response.data) {
       articles.value = response?.data;
     }

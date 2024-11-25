@@ -1,10 +1,14 @@
 <template>
-  <div>
-    <RouterLink :to="{ name: 'product_deposits' }">예금 상품 목록</RouterLink>
-    <RouterLink :to="{ name: 'product_savings' }">적금 상품 목록</RouterLink>
-    <RouterLink :to="{ name: 'product_recommend' }">상품 추천 받기</RouterLink>
+  <div class="main">
+    <div class="main-nav">
+      <RouterLink :to="{ name: 'product_deposits' }">예금 상품 목록</RouterLink>
+      <RouterLink :to="{ name: 'product_savings' }">적금 상품 목록</RouterLink>
+      <RouterLink :to="{ name: 'product_recommend' }"
+        >상품 추천 받기</RouterLink
+      >
+    </div>
+    <RouterView />
   </div>
-  <RouterView />
 </template>
 
 <script setup>

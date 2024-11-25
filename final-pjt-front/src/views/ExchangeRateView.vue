@@ -1,9 +1,13 @@
 <template>
-  <div>
-    <RouterLink :to="{ name: 'exchange_rate_home' }">환율 정보</RouterLink>
-    <RouterLink :to="{ name: 'exchange-rate_calcuate' }">환율 계산</RouterLink>
+  <div class="main">
+    <div class="main-nav">
+      <RouterLink :to="{ name: 'exchange_rate_home' }">환율 정보</RouterLink>
+      <RouterLink :to="{ name: 'exchange-rate_calcuate' }"
+        >환율 계산</RouterLink
+      >
+    </div>
+    <RouterView />
   </div>
-  <RouterView />
 </template>
 
 <script setup>

@@ -2,16 +2,28 @@
   <div>
     <div>
       <label for="country">국가 선택:</label>
-      <select id="country" v-model="selectedCountry">
+      <select class="custom-select" id="country" v-model="selectedCountry">
         <option value="" disabled>선택하세요</option>
-        <option v-for="country in countries" :key="country.cur_unit" :value="country">{{ country.country }}</option>
+        <option
+          v-for="country in countries"
+          :key="country.cur_unit"
+          :value="country"
+        >
+          {{ country.country }}
+        </option>
       </select>
       <input type="number" />
     </div>
 
     <div>
       <label for="koreanMoney">한국 원화:</label>
-      <input type="text" id="koreanMoney" v-model.number="kMoneyInput" @input="convertMoney" /> 원
+      <input
+        type="text"
+        id="koreanMoney"
+        v-model.number="kMoneyInput"
+        @input="convertMoney"
+      />
+      원
     </div>
 
     <div v-if="convertedAmount !== null">
