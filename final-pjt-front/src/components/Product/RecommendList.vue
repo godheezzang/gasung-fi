@@ -2,16 +2,12 @@
   <Loading :isLoading="isLoading" />
   <div>
     <div class="product-container">
-      <div class="product-box">
-        <RecommendListItem
-          v-for="product in recommendProducts"
-          :key="product.fin_prdt_nm"
-          :product="product"
-        />
-      </div>
-
-      <div v-if="recommendProducts.length === 0" class="product-box">
+      <div v-if="recommendProducts.length === 0" class="empty-product">
         <p>추천 상품이 없습니다.</p>
+        <p>상품을 둘러보고 찜해보세요.</p>
+      </div>
+      <div v-else class="product-box">
+        <RecommendListItem v-for="product in recommendProducts" :key="product.fin_prdt_nm" :product="product" />
       </div>
     </div>
 
@@ -21,10 +17,7 @@
           <h3>정보 필요</h3>
         </template>
         <template #body>
-          <p>
-            성별, 나이, 연봉, 자산 정보가 필요해요! 정보 수정 페이지로
-            이동하시겠어요?
-          </p>
+          <p>성별, 나이, 연봉, 자산 정보가 필요해요! 정보 수정 페이지로 이동하시겠어요?</p>
         </template>
         <template #footer>
           <button @click="moveToProfile">네</button>
@@ -102,4 +95,9 @@ onMounted(async () => {
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.empty-product {
+  margin: 2rem auto;
+  text-align: center;
+}
+</style>
