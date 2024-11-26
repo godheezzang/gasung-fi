@@ -65,14 +65,14 @@ const updateSavings = (newSavings) => {
 const nextPage = () => {
   if (currentPage.value < totalPages.value) {
     currentPage.value++;
-    fetchDeposits(currentPage.value);
+    fetchSavings(currentPage.value);
   }
 };
 
 const prevPage = () => {
   if (currentPage.value > 1) {
     currentPage.value--;
-    fetchDeposits(currentPage.value);
+    fetchSavings(currentPage.value);
   }
 };
 
