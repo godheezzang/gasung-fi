@@ -2,13 +2,11 @@ from rest_framework import serializers
 from .models import Article, Comment
 
 class ArticleCreateSerializer(serializers.ModelSerializer):
-    # article_id = serializers.IntegerField(source="id", read_only=True)
     class Meta:
         model = Article
         fields = ("id",'title', 'content',)
         read_only_fields = ('user',)
 class ArticleCommentsSerializer(serializers.ModelSerializer):
-    # comment_id = serializers.IntegerField(source="id", read_only=True)
     username = serializers.SerializerMethodField()
     email = serializers.SerializerMethodField()
     replies = serializers.SerializerMethodField()
@@ -29,7 +27,6 @@ class ArticleCommentsSerializer(serializers.ModelSerializer):
 
 
 class ArticleListSerializer(serializers.ModelSerializer):
-    # article_id = serializers.IntegerField(source="id", read_only=True)
     comments = serializers.SerializerMethodField()
     username = serializers.SerializerMethodField()
     comment_count = serializers.SerializerMethodField()
@@ -52,7 +49,6 @@ class ArticleListSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    # comment_id = serializers.IntegerField(source="id", read_only=True)
     class Meta:
         model = Comment
         fields = ("id",'content',)
