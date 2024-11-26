@@ -42,4 +42,3 @@ class CustomLoginView(LoginView) :
         response_data['is_staff'] = user.is_staff
         response_data['user_products'] = user_products
         return Response(response_data, status=status.HTTP_200_OK)
-

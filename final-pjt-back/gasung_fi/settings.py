@@ -38,7 +38,8 @@ EMAIL_HOST_USER = EMAIL_HOST_USER
 EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-ALLOWED_HOSTS = ['43.200.128.146', '*']
+ALLOWED_HOSTS = ['43.200.128.146', '*', 'https://gasung-fi.xyz',
+                 'https://www.gasung-fi.xyz',]
 
 AUTH_USER_MODEL = 'accounts.User'
 
@@ -51,57 +52,9 @@ CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:5173',
     'http://localhost:5173',
     'http://43.200.128.146',
+    'https://gasung-fi.xyz',
+    'https://www.gasung-fi.xyz',
 ]
-
-SOCIALACCOUNT_PROVIDERS ={
-"kakao": {
-"APP": {
-"client_id": my_settings.KAKAO_API_KEY,
-"secret": "",
-"key": ""
-},
-
-"SCOPE": [
-    'profile',
-    'account_email',
-],
-
-"AUTH_PARAMS": {
-"access_type": "online",
-'prompt': 'select_account',
-}},
-
-"naver": {
-"APP": {
-"client_id": my_settings.NAVER_CLIENT_ID,
-"secret": my_settings.NAVER_CLIENT_SECRET,
-"key": ""
-},
-
-"SCOPE": [
-    'email',
-    'name',
-],
-
-"AUTH_PARAMS": {
-"access_type": "online",
-'prompt': 'select_account',
-}},
-
-"google": {
-"APP": {
-"client_id": my_settings.GOOGLE_CLIENT_ID,
-"secret": my_settings.GOOGLE_CLIENT_SECRET,
-"key": ""
-},
-"SCOPE": [
-    "profile",
-    "email",
-],
-"AUTH_PARAMS": {
-"access_type": "online",
-'prompt': 'select_account',
-}}}
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS' : 'drf_spectacular.openapi.AutoSchema',

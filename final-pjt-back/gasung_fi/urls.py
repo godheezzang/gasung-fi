@@ -23,7 +23,6 @@ from drf_spectacular.views import (SpectacularAPIView,
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
-    path('social/', include('allauth.socialaccount.urls')),
     path('products/', include('products.urls')),
     path('exchange_rate/', include('exchange_rate.urls')),
     path('articles/', include('articles.urls')),
