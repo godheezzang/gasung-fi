@@ -6,16 +6,18 @@
       query: { product_type: productType },
     }"
   >
-    <!-- {{ item }} -->
     <div class="product-card">
-      <p class="product-bank">{{ item.kor_co_nm }}</p>
+      <div class="product-card-title">
+        <img :src="imgPath" alt="은행 이미지" class="bank-img" />
+        <p class="product-bank">{{ item.kor_co_nm }}</p>
+      </div>
       <p class="product-name">{{ item.fin_prdt_nm }}</p>
     </div>
   </RouterLink>
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { useBankStore } from "@/stores/bank";
 import { useRoute } from "vue-router";
 
 const props = defineProps({
@@ -25,24 +27,25 @@ const props = defineProps({
 const route = useRoute();
 const path = route.path;
 const productType = path.split("/")[2];
-// console.log(productType);
-
-// watch(
-//   () => props.item,
-//   (newItem) => {
-//     if (newItem) {
-//       if (newItem.id) {
-//         // console.log(newItem);
-//         productType.value = "saving";
-//       } else if (newItem.id) {
-//         productType.value = "deposit";
-//       } else {
-//         productType.value = null;
-//       }
-//     }
-//   },
-//   { immediate: true }
-// );
+const bankStore = useBankStore();
+const bankName = props.item.kor_co_nm;
+const imgPath = bankStore.bankImage[bankName];
 </script>
 
-<style scoped></style>
+<style scoped>
+.product-card-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.product-bank {
+  font-weight: var(--font-weight-medium);
+}
+
+.bank-img {
+  width: 2.5rem;
+  border-radius: 50%;
+  margin-right: 1rem;
+}
+</style>
