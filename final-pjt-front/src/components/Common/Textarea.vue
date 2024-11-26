@@ -1,5 +1,10 @@
 <template>
-  <textarea placeholder="내용을 작성해 주세요." :value="modelValue" @input="onInput" style="overflow: hidden; resize: none"></textarea>
+  <textarea
+    :placeholder="placeholder"
+    :value="modelValue"
+    @input="onInput"
+    style="overflow: hidden; resize: none"
+  ></textarea>
 </template>
 
 <script setup>
@@ -41,10 +46,12 @@ onMounted(adjustHeightOnMount);
 <style scoped>
 textarea {
   width: 100%; /* 너비를 100%로 설정 */
-  padding: 10px; /* 패딩 추가 */
+  padding: 1rem; /* 패딩 추가 */
   border: 1px solid #ccc; /* 테두리 스타일 */
   border-radius: 4px; /* 모서리 둥글게 */
-  font-size: 16px; /* 글자 크기 */
+  font-size: var(--font-size-medium); /* 글자 크기 */
   box-sizing: border-box; /* 패딩과 테두리를 포함한 너비 계산 */
+  margin-bottom: 0.5rem;
+  max-height: 15rem;
 }
 </style>
