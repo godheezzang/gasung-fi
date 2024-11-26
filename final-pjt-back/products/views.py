@@ -10,6 +10,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import get_user_model
 import random
+from random import sample
 from faker import Faker
 import pandas as pd
 from .serializers import (DepositSerializer,
@@ -396,6 +397,24 @@ def recommend_list(request) :
         for _, row in top_products.iterrows()
     ]
     return Response(result, status=status.HTTP_200_OK)
+
+@api_view(['GET',])
+def random_recommend_list(request) :
+    deposits = get_list_or_404(Deposit)
+    random_deposits = sample(list(deposits), min(3, len(deposits)))
+
+    installment_savings = get_list_or_404(InstallmentSavings)
+    random_installment_savings = sample(list(installment_savings), min(3, len(installment_savings)))
+
+    deposit_serializer = DepositSerializer(random_deposits, many=True)
+    installment_savings_serializer = InstallmentSavingsSerializer(random_installment_savings, many=True)
+
+    data = {
+        "random_deposit" : deposit_serializer.data,
+        "random_installment_savings" : installment_savings_serializer.data,
+    }
+    return Response(data, status=status.HTTP_200_OK)
+
 
 
 
