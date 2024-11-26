@@ -141,6 +141,15 @@
   border: 1px solid var(--color-gray-02);
   box-shadow: 0 0 5px var(--color-gray-02);
   background-color: var(--color-white);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.product-card:hover {
+  box-shadow: 0 0 10px var(--color-primary-blue);
 }
 
 .product-search {
@@ -179,14 +188,6 @@
 
 .product-box div {
   width: 30rem;
-}
-
-.product-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
 }
 
 .product-name {
