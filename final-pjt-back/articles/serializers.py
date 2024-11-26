@@ -4,7 +4,7 @@ from .models import Article, Comment
 class ArticleCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
-        fields = ("id",'title', 'content',)
+        fields = ("id",'title', 'content', 'image',)
         read_only_fields = ('user',)
 class ArticleCommentsSerializer(serializers.ModelSerializer):
     username = serializers.SerializerMethodField()
