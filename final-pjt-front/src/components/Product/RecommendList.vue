@@ -1,17 +1,30 @@
 <template>
   <Loading :isLoading="isLoading" />
   <div>
-    <RecommendListItem v-for="product in recommendProducts" :key="product.fin_prdt_nm" :product="product" />
-    <div v-if="recommendProducts.length === 0">
-      <p>추천 상품이 없습니다.</p>
+    <div class="product-container">
+      <div class="product-box">
+        <RecommendListItem
+          v-for="product in recommendProducts"
+          :key="product.fin_prdt_nm"
+          :product="product"
+        />
+      </div>
+
+      <div v-if="recommendProducts.length === 0" class="product-box">
+        <p>추천 상품이 없습니다.</p>
+      </div>
     </div>
+
     <Teleport to="body">
       <Modal :show="showModal" @close="showModal = false">
         <template #header>
           <h3>정보 필요</h3>
         </template>
         <template #body>
-          <p>성별, 나이, 연봉, 자산 정보가 필요해요! 정보 수정 페이지로 이동하시겠어요?</p>
+          <p>
+            성별, 나이, 연봉, 자산 정보가 필요해요! 정보 수정 페이지로
+            이동하시겠어요?
+          </p>
         </template>
         <template #footer>
           <button @click="moveToProfile">네</button>
@@ -46,8 +59,8 @@ const fetchRecommend = async () => {
         Authorization: `Token ${userStore.token}`,
       },
     });
-    console.log(response);
-    console.log(response.data);
+    // console.log(response);
+    // console.log(response.data);
     recommendProducts.value = response.data;
     isLoading.value = false;
   } catch (error) {
@@ -73,13 +86,6 @@ const moveToBack = () => {
 };
 
 onMounted(async () => {
-  // 1. 로그인하지 않은 사용자의 접근을 막기
-  if (!userStore.isLoggedIn) {
-    alert("로그인이 필요한 서비스입니다.");
-    router.push({ name: "login" });
-    return;
-  }
-
   await userStore.getUserInfo();
   // 2. 유저의 age, assets, income 정보 확인
   const { age, assets, income } = userStore;
@@ -89,7 +95,7 @@ onMounted(async () => {
   if (age === null || assets === null || income === null) {
     showModal.value = true;
   } else {
-    fetchRecommend();
+    await fetchRecommend();
   }
 
   // 3. 상품 추천 데이터 fetch

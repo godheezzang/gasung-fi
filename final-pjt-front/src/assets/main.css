@@ -181,6 +181,19 @@
   width: 30rem;
 }
 
+.product-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.product-name {
+  font-size: var(--font-size-large);
+  font-weight: var(--font-weight-medium);
+}
+
 .pagination {
   margin-top: 3rem;
   text-align: center;
