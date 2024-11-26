@@ -14,7 +14,6 @@ export const useRateStore = defineStore("rate", () => {
         url: `${BASE_URL}/exchange_rate/get_exchange_rates/`,
       });
 
-      // console.log(response.data);
       rates.value = response?.data;
 
       formattedRates.value = rates.value.map((rate) => {

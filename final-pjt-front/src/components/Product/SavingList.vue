@@ -11,7 +11,7 @@
         <div v-if="savings.length === 0" class="product-box">
           <p>상품 정보가 없습니다.</p>
         </div>
-        <div class="pagination">
+        <div class="pagination" v-if="savings.length > 0">
           <button @click="prevPage" :disabled="currentPage === 1" class="previous-icon">
             <img src="@/assets/icons/arrow_forward.svg" alt="이전" />
           </button>
@@ -65,14 +65,14 @@ const updateSavings = (newSavings) => {
 const nextPage = () => {
   if (currentPage.value < totalPages.value) {
     currentPage.value++;
-    fetchDeposits(currentPage.value);
+    fetchSavings(currentPage.value);
   }
 };
 
 const prevPage = () => {
   if (currentPage.value > 1) {
     currentPage.value--;
-    fetchDeposits(currentPage.value);
+    fetchSavings(currentPage.value);
   }
 };
 

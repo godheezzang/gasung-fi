@@ -14,12 +14,7 @@
           </p>
         </div>
         <div class="article-body">
-          <img
-            v-if="article.image"
-            :src="imageUrl"
-            alt="Image"
-            class="article-image"
-          />
+          <img v-if="article.image" :src="imageUrl" alt="Image" class="article-image" />
           <p>{{ article.content }}</p>
         </div>
       </div>
@@ -29,13 +24,7 @@
           >개의 댓글
         </p>
         <div class="comment-container">
-          <CommentListItem
-            v-if="article.comment_count"
-            v-for="comment in article.comments"
-            :key="comment.id"
-            :comment="comment"
-            @commentDeleted=""
-          />
+          <CommentListItem v-if="article.comment_count" v-for="comment in article.comments" :key="comment.id" :comment="comment" @commentDeleted="" />
           <div v-if="!article.comment_count">
             <p>댓글이 없습니다.</p>
           </div>
@@ -45,18 +34,8 @@
       <!-- TODO: 사용자 동일 여부에 따라 삭제, 수정버튼 렌더링 -->
       <div class="article-btn-container">
         <Button content="목록" :onClick="moveToList" ariaLabel="게시글 목록" />
-        <Button
-          v-if="article.email === store.userEmail"
-          content="삭제"
-          :onClick="handleDelete"
-          ariaLabel="게시글 삭제"
-        />
-        <Button
-          v-if="article.email === store.userEmail"
-          content="수정"
-          :onClick="moveToUpdate"
-          ariaLabel="게시글 수정"
-        />
+        <Button v-if="article.email === store.userEmail" content="삭제" :onClick="handleDelete" ariaLabel="게시글 삭제" />
+        <Button v-if="article.email === store.userEmail" content="수정" :onClick="moveToUpdate" ariaLabel="게시글 수정" />
       </div>
     </div>
   </div>
@@ -102,14 +81,11 @@ const handleDelete = async () => {
   window.confirm("게시글을 삭제하시겠습니까?");
   if (confirm) {
     try {
-      const response = await axios.delete(
-        `${import.meta.env.VITE_BASE_URL}/articles/${articleId}/`,
-        {
-          headers: {
-            Authorization: `Token ${store.token}`,
-          },
-        }
-      );
+      const response = await axios.delete(`${import.meta.env.VITE_BASE_URL}/articles/${articleId}/`, {
+        headers: {
+          Authorization: `Token ${store.token}`,
+        },
+      });
 
       // console.log(response);
       if (response.status === 204) {
@@ -132,9 +108,7 @@ const moveToUpdate = () => {
 
 const getDetailArticle = async () => {
   try {
-    const response = await axios.get(
-      `${import.meta.env.VITE_BASE_URL}/articles/${articleId}/`
-    );
+    const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/articles/${articleId}/`);
 
     if (response.status === 200) {
       console.log(response);
@@ -215,6 +189,7 @@ onMounted(() => {
   flex-grow: 2;
   flex-shrink: 0;
   margin-top: 2rem;
+  padding: 0 0 3rem 0;
 }
 
 .article-body p {
