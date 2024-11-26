@@ -377,8 +377,8 @@ def recommend_list(request) :
     ]
 
     similar_users_ids = similar_users['id'].tolist()
-    user_products = UserProducts.objects.filter(user_id__in=similar_users_ids)
-    recommended_products = (UserProducts.objects.filter(user_id__in=similar_users_ids).exclude(fin_prdt_cd__in=user_products))
+    user_products_cd = UserProducts.objects.filter(user_id=user.id).values_list('fin_prdt_cd', flat=True)
+    recommended_products = (UserProducts.objects.filter(user_id__in=similar_users_ids).exclude(fin_prdt_cd__in=user_products_cd))
     try :
         df_products = pd.DataFrame(list(recommended_products.values('fin_prdt_cd','fin_prdt_nm', 'product_type', 'kor_co_nm')))
         product_counts = df_products.groupby(['fin_prdt_cd','fin_prdt_nm', 'product_type', 'kor_co_nm']).size().reset_index(name='count')

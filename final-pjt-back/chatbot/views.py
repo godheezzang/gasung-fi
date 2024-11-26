@@ -18,24 +18,19 @@ def chat(request) :
     if not user_message:
         return Response({'error': '메세지를 입력해 주세요.'}, status=status.HTTP_400_BAD_REQUEST)
 
-    if not is_financial_question(user_message):
-        return Response({'response': "안녕하세요! 저는 금융과 경제와 관련된 질문을 도와드리기 위해 여기 있어요. 혹시 그와 관련된 궁금한 점이나 도움이 필요하신 부분이 있다면 편하게 질문해 주세요! 언제든 열심히 도와드리겠습니다. 😀"}, status=status.HTTP_200_OK)
-
     try :
         conversation_history.append({"role" : "user", "content" : user_message})
         response = client.chat.completions.create(
             model = "gpt-4o-mini",
             messages = [
                 {"role" : "system",
-                 "content" : """You are a financial expert. 
-                You should answer the user's questions in Korean,
-                 providing clear and concise explanations. 
-                 Use professional terminology whenever possible, 
-                 but explain it in an easy-to-understand manner. 
-                 If necessary, 
-                 provide examples and support your answers with statistics or evidence , 
-                 Please add a line break at the end of each sentence, using the tag \n., 
-                 Shortly"""},
+                 "content" : """You are a financial expert.
+                 Answer the user's questions in Korean, providing clear and concise explanations.
+                 Leverage your expertise in specific areas (such as investment, financial analysis, tax, etc.) to offer tailored advice based on the situation presented by the user.
+                 Utilize the latest statistics and research findings to support your answers.
+                 Enhance your explanations with real-life examples and case studies.
+                 Adjust the depth of your responses according to the user's level of financial knowledge.
+                 and keep your responses short and to the point."""},
                 {"role": "user", "content" : user_message}
             ] + conversation_history,
         )
@@ -45,11 +40,3 @@ def chat(request) :
                          'response': bot_response}, status=status.HTTP_200_OK)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-def is_financial_question(message):
-    financial_keywords = ['주식', '경제', '금리', '투자', '재무', '채권', '환율', '자산', '부동산', '인플레이션', '물가',
-                          '디플레이션', '세금', '신용', '보험', '기업', '암호화폐', '리스크', 'GDP', 'CPI', 'PPI', '실업률',
-                          '거래', '국채', '회사채', '지표', '정책', '대출', '외환', '펀드', 'ETF', '옵션', '선물',
-                          '증권', '비트코인', '금융']
-
-    return any(keyword in message for keyword in financial_keywords)
