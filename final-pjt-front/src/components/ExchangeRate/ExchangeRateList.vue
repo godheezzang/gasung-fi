@@ -3,7 +3,12 @@
     <Loading :isLoading="isLoading" />
 
     <div class="rate-container product-box">
-      <ExchangeRateListItem v-for="rate in rateInfos" :key="rate.cur_unit" :rate="rate" class="product-card" />
+      <ExchangeRateListItem
+        v-for="rate in rateInfos"
+        :key="rate.cur_unit"
+        :rate="rate"
+        class="product-card"
+      />
     </div>
     <!-- TODO: 환율 정보 불러올 수 없을 경우 에러 페이지 -->
   </div>
@@ -25,8 +30,8 @@ const fetchRate = async () => {
   isLoading.value = false;
 };
 
-onMounted(() => {
-  fetchRate();
+onMounted(async () => {
+  await fetchRate();
 });
 </script>
 
