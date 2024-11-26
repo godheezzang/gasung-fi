@@ -17,9 +17,10 @@ import { onMounted, ref, watch } from "vue";
 
 const store = useRateStore();
 const rateInfos = ref(null);
-const isLoading = ref(true);
+const isLoading = ref(false);
 
 const fetchRate = async () => {
+  isLoading.value = true;
   await store.getRate();
   rateInfos.value = store.formattedRates;
   isLoading.value = false;

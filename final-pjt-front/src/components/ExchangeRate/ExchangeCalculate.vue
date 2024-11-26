@@ -1,44 +1,30 @@
 <template>
-  <div>
-    <div>
-      <label for="country">국가 선택:</label>
-      <select class="custom-select" id="country" v-model="selectedCountry">
-        <option value="" disabled>선택하세요</option>
-        <option
-          v-for="country in countries"
-          :key="country.cur_unit"
-          :value="country"
-        >
-          {{ country.country }}
-        </option>
-      </select>
-    </div>
+  <div class="cal-container">
+    <div class="cal-wrap">
+      <div class="cal-inputs">
+        <label for="country">국가 선택</label>
+        <select class="custom-select" id="country" v-model="selectedCountry">
+          <option value="" disabled>선택하세요</option>
+          <option v-for="country in countries" :key="country.cur_unit" :value="country">
+            {{ country.country }}
+          </option>
+        </select>
+      </div>
 
-    <div>
-      <label for="koreanMoney">한국 원화 : </label>
-      <input
-        type="number"
-        id="koreanMoney"
-        v-model.number="kMoneyInput"
-        @input="convertToForeign"
-      />
-      <span>원</span>
-    </div>
+      <div class="cal-inputs">
+        <label for="koreanMoney">한국 원화</label>
+        <input type="number" id="koreanMoney" v-model.number="kMoneyInput" @input="convertToForeign" class="user-input" />
+        <span>원</span>
+      </div>
 
-    <div v-if="convertedAmount !== null">
-      <label for="foreignMoney"
-        >{{ selectedCountry.country }} {{ selectedCountry.money }} :
-      </label>
-      <input
-        type="number"
-        id="foreignMoney"
-        v-model.number="foreignMoneyInput"
-        @input="convertToKorean"
-      />
-      <span>{{ selectedCountry.money }}</span>
-    </div>
-    <div v-else>
-      <p>환율 정보를 선택하세요.</p>
+      <div v-if="convertedAmount !== null" class="cal-inputs">
+        <label for="foreignMoney">{{ selectedCountry.country }} {{ selectedCountry.money }}</label>
+        <input type="number" id="foreignMoney" v-model.number="foreignMoneyInput" @input="convertToKorean" class="user-input" />
+        <span> {{ selectedCountry.money }}</span>
+      </div>
+      <div v-else>
+        <p class="err-msg">국가를 선택하세요.</p>
+      </div>
     </div>
   </div>
 </template>
@@ -129,5 +115,42 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* 스타일을 추가할 수 있습니다 */
+.cal-container {
+  /* box-shadow: inset 0 0 20px red; */
+  width: 50%;
+  margin: 0 auto;
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.cal-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.cal-inputs {
+  width: 100%;
+}
+.cal-inputs label {
+  font-size: var(--font-size-mlarge);
+  font-weight: var(--font-weight-medium);
+  margin-right: 0.5rem;
+}
+.cal-inputs span {
+  margin-left: 1rem;
+}
+
+.user-input {
+  border-radius: 5px;
+}
+
+.err-msg {
+  text-align: center;
+  font-size: var(--font-size-medium);
+}
 </style>
