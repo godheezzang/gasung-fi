@@ -1,7 +1,6 @@
 <template>
   <div class="detail-wrap">
-    <!-- <Button :content="alreadyJoined ? '찜 완료' : '찜하기'" :onClick="alreadyJoined ? null : handleJoin" ariaLabel="찜하기" :customClass="alreadyJoined ? 'disabled-btn' : ''" class="bookmark-btn" /> -->
-
+    <Button :content="alreadyJoined ? '찜 완료' : '찜하기'" :onClick="alreadyJoined ? null : handleJoin" ariaLabel="찜하기" :customClass="alreadyJoined ? 'disabled-btn' : ''" class="bookmark-btn" />
     <div v-if="product" class="detail-container">
       <div class="detail-header">
         <div class="detail-header-info">
