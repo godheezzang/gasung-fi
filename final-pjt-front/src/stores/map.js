@@ -190,9 +190,8 @@ export const useMapStore = defineStore("map", () => {
   ]);
 
   const banks = ref([
-    "은행",
     "국민은행",
-    "농협은행",
+    "농협은행주식회사",
     "우리은행",
     "산업은행",
     "기업은행",
@@ -201,7 +200,7 @@ export const useMapStore = defineStore("map", () => {
     "신한은행",
     "한국스탠다드차타드은행",
     "전북은행",
-    "KEB하나은행",
+    "하나은행",
     "수협은행",
     "경남은행",
     "새마을금고",
@@ -212,6 +211,10 @@ export const useMapStore = defineStore("map", () => {
     "중소기업은행",
     "한국산업은행",
     "제주은행",
+    "아이엠뱅크",
+    "주식회사 카카오뱅크",
+    "토스뱅크 주식회사",
+    "주식회사 케이뱅크",
   ]);
 
   return { infos, banks };
