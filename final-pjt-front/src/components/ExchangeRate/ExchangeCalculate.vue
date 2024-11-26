@@ -12,26 +12,30 @@
           {{ country.country }}
         </option>
       </select>
-
     </div>
 
     <div>
       <label for="koreanMoney">한국 원화 : </label>
       <input
-        type="text"
+        type="number"
         id="koreanMoney"
         v-model.number="kMoneyInput"
         @input="convertToForeign"
       />
+      <span>원</span>
     </div>
 
     <div v-if="convertedAmount !== null">
-      <label for="foreignMoney">{{selectedCountry.country}} {{selectedCountry.money}} : </label>
-      <input type="text"
-             id="foreignMoney"
-             v-model.number="foreignMoneyInput"
-             @input="convertToKorean"
+      <label for="foreignMoney"
+        >{{ selectedCountry.country }} {{ selectedCountry.money }} :
+      </label>
+      <input
+        type="number"
+        id="foreignMoney"
+        v-model.number="foreignMoneyInput"
+        @input="convertToKorean"
       />
+      <span>{{ selectedCountry.money }}</span>
     </div>
     <div v-else>
       <p>환율 정보를 선택하세요.</p>
@@ -90,8 +94,7 @@ const convertToKorean = () => {
     } else {
       kMoneyInput.value = 0; // bkpr가 유효하지 않은 경우
     }
-  }
-  else {
+  } else {
     kMoneyInput.value = 0; // 국가가 선택되지 않았거나 입력이 유효하지 않은 경우
   }
 };

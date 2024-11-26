@@ -21,7 +21,7 @@ const viewText = () => {
   if (i < props.text.length) {
     typedText.value += props.text.charAt(i);
     i++;
-    setTimeout(viewText, 30); // 글자 추가 간격
+    setTimeout(viewText, 15); // 글자 추가 간격
   }
 };
 
