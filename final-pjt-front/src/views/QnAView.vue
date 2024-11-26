@@ -13,7 +13,8 @@
       </div>
 
       <div class="input-container">
-        <input v-model="userInput" @keyup.enter="sendMessage" placeholder="메시지를 입력해주세요." />
+        <Textarea placeholder="메시지를 입력하세요" v-model="userInput" @keyup.enter="sendMessage" />
+        <!-- <input v-model="userInput" @keyup.enter="sendMessage" placeholder="메시지를 입력해주세요." /> -->
         <button @click="sendMessage">Send</button>
       </div>
     </div>
@@ -27,6 +28,7 @@ import axios from "axios";
 import { useUserStore } from "@/stores/user";
 import Loading from "@/components/Common/Loading.vue";
 import TypingEffect from "@/components/Chatbot/TypingEffect.vue"; // TypingEffect 컴포넌트 임포트
+import Textarea from "@/components/Common/Textarea.vue";
 
 const userInput = ref("");
 const messages = ref([]); // 채팅 메시지 저장 배열
@@ -87,6 +89,7 @@ const sendMessage = async () => {
   padding: 20px;
   background-color: #f5f5f5;
   width: 80rem;
+  border-radius: 10px;
 }
 
 .chat-window {
