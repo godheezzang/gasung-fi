@@ -13,7 +13,7 @@
         <p class="product-type" :class="{ deposit: isDeposit }">
           {{ product.product_type }}
         </p>
-        <p>이 상품을 가입한 사람들의 수: {{ product.count }}명</p>
+        <p>같이 찜한 사용자 수: {{ product.count }}명</p>
       </div>
     </div>
   </RouterLink>
