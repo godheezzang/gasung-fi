@@ -47,15 +47,24 @@ const props = defineProps({
   flex-grow: 1;
   flex-basis: 6rem;
   text-align: center;
+  flex-shrink: 0;
   border-right: 1px solid var(--color-gray-01);
+  max-width: 10rem;
 }
 
 .article-title {
   flex-grow: 2;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  max-width: 50rem;
 }
 
 .article-username {
   flex-grow: 1;
   text-align: center;
+  flex-shrink: 0;
+  max-width: 15rem;
 }
 </style>
