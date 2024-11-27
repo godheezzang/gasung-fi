@@ -7,7 +7,11 @@
         <p>상품을 둘러보고 찜해보세요.</p>
       </div>
       <div v-else class="product-box">
-        <RecommendListItem v-for="product in recommendProducts" :key="product.fin_prdt_nm" :product="product" />
+        <RecommendListItem
+          v-for="product in recommendProducts"
+          :key="product.fin_prdt_nm"
+          :product="product"
+        />
       </div>
     </div>
 
@@ -17,7 +21,10 @@
           <h3>정보 필요</h3>
         </template>
         <template #body>
-          <p>성별, 나이, 연봉, 자산 정보가 필요해요! 정보 수정 페이지로 이동하시겠어요?</p>
+          <p>
+            성별, 나이, 연봉, 자산 정보가 필요해요! 정보 수정 페이지로
+            이동하시겠어요?
+          </p>
         </template>
         <template #footer>
           <button @click="moveToProfile">네</button>
@@ -52,7 +59,7 @@ const fetchRecommend = async () => {
         Authorization: `Token ${userStore.token}`,
       },
     });
-    // console.log(response);
+    console.log(response);
     // console.log(response.data);
     recommendProducts.value = response.data;
     isLoading.value = false;
