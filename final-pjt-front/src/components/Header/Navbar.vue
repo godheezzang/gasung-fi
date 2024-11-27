@@ -6,7 +6,12 @@
   <div v-if="isLoggedIn" class="nav-container">
     <RouterLink :to="{ name: 'my_profile' }">프로필</RouterLink>
     <RouterLink :to="{ name: 'my_products' }">내 상품</RouterLink>
-    <Button :onClick="handleLogout" content="로그아웃" ariaLabel="로그아웃" customClass="small-btn"></Button>
+    <Button
+      :onClick="handleLogout"
+      content="로그아웃"
+      ariaLabel="로그아웃"
+      customClass="small-btn"
+    ></Button>
   </div>
 </template>
 
@@ -34,5 +39,6 @@ const handleLogout = () => {
   font-weight: var(--font-weight-regular);
   font-size: var(--font-size-small);
   align-items: center;
+  margin-top: 1rem;
 }
 </style>
