@@ -29,7 +29,7 @@ import { RouterLink } from "vue-router";
 .menu-container .router-link-active,
 .menu-container .router-link-exact-active {
   font-weight: var(--font-weight-bold);
-  border-bottom: 3.5px solid var(--color-primary-blue);
+  border-bottom: 4px solid var(--color-primary-blue);
 }
 
 .menu-parent {
@@ -43,6 +43,6 @@ import { RouterLink } from "vue-router";
 }
 
 .menu-parent a:hover {
-  border-bottom: 3.5px solid var(--color-primary-blue);
+  border-bottom: 4px solid var(--color-primary-blue);
 }
 </style>
