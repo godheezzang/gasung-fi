@@ -10,7 +10,6 @@
       <p class="product-name">{{ product.fin_prdt_nm }}</p>
       <div class="product-bank">
         <img :src="imgPath" alt="은행 이미지" class="product-img" />
-
         <p>{{ product.kor_co_nm }}</p>
       </div>
       <div class="recommend-desc">

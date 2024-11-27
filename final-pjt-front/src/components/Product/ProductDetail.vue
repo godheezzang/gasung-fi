@@ -1,6 +1,12 @@
 <template>
   <div class="detail-wrap">
-    <Button :content="alreadyJoined ? '찜 완료' : '찜하기'" :onClick="alreadyJoined ? null : handleJoin" ariaLabel="찜하기" :customClass="alreadyJoined ? 'disabled-btn' : ''" class="bookmark-btn" />
+    <Button
+      :content="alreadyJoined ? '찜 완료' : '찜하기'"
+      :onClick="alreadyJoined ? null : handleJoin"
+      ariaLabel="찜하기"
+      :customClass="alreadyJoined ? 'disabled-btn' : ''"
+      class="bookmark-btn"
+    />
     <div v-if="product" class="detail-container">
       <div class="detail-header">
         <div class="detail-header-info">
@@ -45,12 +51,26 @@
           <p class="product-desc-title">세부 상품</p>
           <div class="product-options product-desc-info">
             <ul class="product-box">
-              <li v-for="option in product.options" :key="option.id" class="product-card">
-                <p class="intr-type" :class="{ bokli: option.intr_rate_type_nm === '복리' }">{{ option.intr_rate_type_nm }}</p>
+              <li
+                v-for="option in product.options"
+                :key="option.id"
+                class="product-card"
+              >
+                <p
+                  class="intr-type"
+                  :class="{ bokli: option.intr_rate_type_nm === '복리' }"
+                >
+                  {{ option.intr_rate_type_nm }}
+                </p>
                 <p>저축 기간: {{ option.save_trm }}개월</p>
                 <p>저축 금리: {{ option.intr_rate }}%</p>
                 <p>최고 우대금리: {{ option.intr_rate2 }}%</p>
-                <Button v-if="store.isStaff" content="금리 수정" :onClick="() => moveToUpdateRate(option.id)" ariaLabel="금리 수정" />
+                <Button
+                  v-if="store.isStaff"
+                  content="금리 수정"
+                  :onClick="() => moveToUpdateRate(option.id)"
+                  ariaLabel="금리 수정"
+                />
               </li>
             </ul>
           </div>
@@ -88,7 +108,7 @@ const imgPath = ref("");
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-console.log(productType);
+// console.log(productType);
 const moveToUpdateRate = (optionId) => {
   console.log(optionId);
 
@@ -103,7 +123,9 @@ const moveToUpdateRate = (optionId) => {
 
 // 이미 가입한 상품 목록에서 해당 상품이 있는지 확인
 const checkAlreadyJoined = () => {
-  alreadyJoined.value = store.userProducts.some((userProduct) => userProduct.fin_prdt_cd === finPrdtCd);
+  alreadyJoined.value = store.userProducts.some(
+    (userProduct) => userProduct.fin_prdt_cd === finPrdtCd
+  );
   return alreadyJoined.value;
 };
 
@@ -111,7 +133,9 @@ alreadyJoined.value = checkAlreadyJoined();
 
 const handleJoin = async () => {
   if (!store.isLoggedIn) {
-    const confirmed = window.confirm("로그인된 사용자만 이용할 수 있어요!\n 로그인 화면으로 이동하시겠어요?");
+    const confirmed = window.confirm(
+      "로그인된 사용자만 이용할 수 있어요!\n 로그인 화면으로 이동하시겠어요?"
+    );
 
     if (confirmed) {
       router.push({ name: "login" });
@@ -124,10 +148,11 @@ const handleJoin = async () => {
   }
 
   const url = getUrl();
-  console.log(url);
+  // console.log(url);
 
   const confirmed = window.confirm("상품을 찜하시겠습니까?");
   if (confirmed) {
+    isLoading.value = true;
     try {
       const response = await axios({
         method: "post",
@@ -141,10 +166,13 @@ const handleJoin = async () => {
       // 상품 가입 후 사용자 상품 목록 요청
       await store.getUserProducts();
       alreadyJoined.value = true;
-      alert("상품 가입이 완료되었습니다.");
+      isLoading.value = false;
+
+      alert("상품 찜하기가 완료되었습니다.");
     } catch (error) {
+      isLoading.value = false;
       console.error(error);
-      alert("상품 가입에 실패했어요!");
+      alert("상품 찜하기 실패했어요!");
     }
   }
 };
@@ -164,7 +192,9 @@ const changeJoinDenyDesc = (joinDeny) => {
 
 // productType에 따라 요청 url 선택하는 로직
 const getUrl = () => {
-  return productType === "savings" ? `${BASE_URL}/products/installment_savings/${finPrdtCd}/` : `${BASE_URL}/products/deposit/${finPrdtCd}/`;
+  return productType === "savings"
+    ? `${BASE_URL}/products/installment_savings/${finPrdtCd}/`
+    : `${BASE_URL}/products/deposit/${finPrdtCd}/`;
 };
 
 // 상품 상세 정보 불러오는 로직
