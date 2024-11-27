@@ -5,7 +5,11 @@
         <label for="country">국가 선택</label>
         <select class="custom-select" id="country" v-model="selectedCountry">
           <option value="" disabled>선택하세요</option>
-          <option v-for="country in countries" :key="country.cur_unit" :value="country">
+          <option
+            v-for="country in countries"
+            :key="country.cur_unit"
+            :value="country"
+          >
             {{ country.country }}
           </option>
         </select>
@@ -13,13 +17,29 @@
 
       <div class="cal-inputs">
         <label for="koreanMoney">한국 원화</label>
-        <input type="number" id="koreanMoney" v-model.number="kMoneyInput" @input="convertToForeign" class="user-input" />
+        <input
+          type="number"
+          id="koreanMoney"
+          v-model.number="kMoneyInput"
+          @input="convertToForeign"
+          class="user-input"
+          placeholder="0.00"
+        />
         <span>원</span>
       </div>
 
       <div v-if="convertedAmount !== null" class="cal-inputs">
-        <label for="foreignMoney">{{ selectedCountry.country }} {{ selectedCountry.money }}</label>
-        <input type="number" id="foreignMoney" v-model.number="foreignMoneyInput" @input="convertToKorean" class="user-input" />
+        <label for="foreignMoney"
+          >{{ selectedCountry.country }} {{ selectedCountry.money }}</label
+        >
+        <input
+          type="number"
+          id="foreignMoney"
+          v-model.number="foreignMoneyInput"
+          @input="convertToKorean"
+          class="user-input"
+          placeholder="0.00"
+        />
         <span> {{ selectedCountry.money }}</span>
       </div>
       <div v-else>
@@ -49,7 +69,7 @@ const countries = computed(() => {
   }));
 });
 
-console.log(selectedCountry.value);
+// console.log(selectedCountry.value);
 
 // const kMoneyInput = ref(selectedCountry.value.bkpr);
 

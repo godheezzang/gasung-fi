@@ -13,7 +13,7 @@ const router = useRouter();
 const userStore = useUserStore();
 
 const redirectToLogin = () => {
-  console.log("log");
+  // console.log("log");
   router.push({ name: "login" }); // 로그인 페이지로 이동
   showModal.value = false; // 모달 닫기
 };

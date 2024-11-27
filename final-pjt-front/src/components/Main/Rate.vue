@@ -36,7 +36,7 @@ const fetchRate = async () => {
   await rateStore.getRate();
   rateInfos.value = rateStore.formattedRates;
   isLoading.value = false;
-  console.log(rateInfos.value);
+  // console.log(rateInfos.value);
 };
 
 onMounted(async () => {

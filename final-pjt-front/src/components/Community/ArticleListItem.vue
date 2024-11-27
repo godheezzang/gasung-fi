@@ -10,7 +10,7 @@
         <p class="article-id">{{ article.id }}</p>
         <p class="article-title">
           {{ article.title }}
-          <span class="article-comment"></span>
+          <span class="article-comment">({{ article.comment_count }})</span>
         </p>
         <p class="article-username">{{ article.username }}</p>
       </div>
@@ -26,7 +26,7 @@ const props = defineProps({
   article: Object,
 });
 
-// console.log(props.article);
+console.log(props.article);
 </script>
 
 <style scoped>
@@ -41,6 +41,18 @@ const props = defineProps({
   gap: 2rem;
   height: 1rem;
   align-items: center;
+}
+
+.article-comment {
+  color: var(--color-error);
+}
+
+.article-desc:hover .article-title {
+  color: var(--color-primary-blue);
+}
+
+.article-desc:hover .article-comment {
+  color: var(--color-black);
 }
 
 .article-id {
