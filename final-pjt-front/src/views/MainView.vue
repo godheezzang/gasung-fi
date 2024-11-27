@@ -6,9 +6,14 @@
     </div>
     <div class="main-preview">
       <div class="main-community">
-        <p class="preview-title">신규 게시글</p>
-        <p class="preview-desc">실시간 최신 게시글을 확인해 보세요.</p>
-        <RouterLink :to="{ name: 'community' }">커뮤니티 바로가기</RouterLink>
+        <div class="community-wrap">
+          <p class="preview-title">신규 게시글</p>
+          <p class="preview-desc">실시간 최신 게시글을 확인해 보세요.</p>
+          <RouterLink :to="{ name: 'community' }" class="move-to-cm"
+            >커뮤니티 바로가기</RouterLink
+          >
+        </div>
+
         <Community />
       </div>
       <div class="main-rate">
@@ -55,6 +60,14 @@ import { RouterLink, RouterView } from "vue-router";
   /* box-shadow: inset 0 0 20px purple; */
   flex-grow: 1;
   display: flex;
+  gap: 2rem;
+}
+
+.main-rate,
+.main-community {
+  border: 1px solid var(--color-gray-01);
+  padding: 1rem;
+  border-radius: 5px;
 }
 
 .preview-title {
@@ -75,9 +88,20 @@ import { RouterLink, RouterView } from "vue-router";
   flex-grow: 1;
 }
 
+.community-wrap {
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--color-gray-01);
+}
+
 .main-rate {
   /* box-shadow: inset 0 0 20px salmon; */
   flex-grow: 1;
   max-width: 50%;
+}
+
+.move-to-cm {
+  color: var(--color-primary-blue);
+  font-weight: var(--font-weight-medium);
+  margin-top: 1rem;
 }
 </style>
